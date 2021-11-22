@@ -1,6 +1,6 @@
 package com.project.paymybuddy.model.BankAccounts;
 
-import com.project.paymybuddy.model.User.Users;
+import com.project.paymybuddy.model.User.UserEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ public class BankAccountEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "users_id")
-    private Users user;
+    private UserEntity user;
 
     @Column(name = "rib", nullable = false)
     private String rib;

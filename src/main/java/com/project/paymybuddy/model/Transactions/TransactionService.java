@@ -1,18 +1,16 @@
 package com.project.paymybuddy.model.Transactions;
 
-import com.project.paymybuddy.model.Transactions.Transaction;
-
 import java.util.Optional;
 
 public interface TransactionService {
 
-    Iterable<Transaction> findAllTransactions(Long id);
+    Iterable<TransactionEntity> findAllTransactions(Long id);
 
-    Optional<Transaction> findTransactionByContact(String Beneficiary);
+    Optional<TransactionEntity> findTransactionById(Long id);
 
-    Optional<Transaction> deleteTransaction(Long id);
+    Optional<TransactionEntity> deleteTransaction(Long id);
 
-    Optional<Transaction> madeTransaction();
+    TransactionEntity saveTransaction(TransactionEntity transactionEntity);
 
-
+    Optional<TransactionEntity> updateTransaction(TransactionEntity transactionEntity, Long id);
 }

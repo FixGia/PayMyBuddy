@@ -1,8 +1,7 @@
 package com.project.paymybuddy.model.Transactions;
 
 
-import com.project.paymybuddy.model.Contacts.Contact;
-import com.project.paymybuddy.model.User.Users;
+import com.project.paymybuddy.model.User.UserEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,7 @@ import java.time.LocalDate;
 @Setter
 @EqualsAndHashCode
 @Table(name= "transactions")
-public class Transaction {
+public class TransactionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,11 +30,11 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "beneficiary_id", nullable = false)
-    private Contact beneficiary;
+    private UserEntity beneficiary;
 
     @ManyToOne
     @JoinColumn(name= "payer_id", nullable = false)
-    private Users payer;
+    private UserEntity payer;
 
 
 }

@@ -1,6 +1,5 @@
 package com.project.paymybuddy.model.User;
 
-import com.project.paymybuddy.model.Contacts.Contact;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name= "users")
-public class Users implements UserDetails {
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,19 +29,25 @@ public class Users implements UserDetails {
     private String lastname;
     private String email;
     private String password;
+    private double wallet;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
     private Boolean locked = false;
     private Boolean enabled= false;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Contact> contactList;
 
-    public Users(String firstname,
-                 String lastname,
-                 String email,
-                 String civility,
-                 String password,
-                 AppUserRole appUserRole) {
+    /**
+     * Contact List
+     * Create a relation between user and user
+     */
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<UserEntity> contactList;
+
+    public UserEntity(String firstname,
+                      String lastname,
+                      String email,
+                      String civility,
+                      String password,
+                      AppUserRole appUserRole) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.civility = civility;

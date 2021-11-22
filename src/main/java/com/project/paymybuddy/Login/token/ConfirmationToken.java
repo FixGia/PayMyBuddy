@@ -1,6 +1,6 @@
 package com.project.paymybuddy.Login.token;
 
-import com.project.paymybuddy.model.User.Users;
+import com.project.paymybuddy.model.User.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,15 +30,15 @@ public class ConfirmationToken {
 
     @ManyToOne
     @JoinColumn
-    private Users users;
+    private UserEntity userEntity;
 
     public ConfirmationToken(String token,
                              LocalDateTime createdAt,
                              LocalDateTime expiredAt,
-                              Users users) {
+                              UserEntity userEntity) {
         this.token = token;
         this.createdAt = createdAt;
         this.expiredAt = expiredAt;
-        this.users = users;
+        this.userEntity = userEntity;
     }
 }

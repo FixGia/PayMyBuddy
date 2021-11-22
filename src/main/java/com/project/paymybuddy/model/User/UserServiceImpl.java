@@ -1,9 +1,11 @@
 package com.project.paymybuddy.model.User;
 
+import com.project.paymybuddy.Exception.DataNotFoundException;
 import com.project.paymybuddy.Login.token.ConfirmationToken;
 import com.project.paymybuddy.Login.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,6 +30,13 @@ public class UserServiceImpl implements UserDetailsService,UserService {
     private final ConfirmationTokenService confirmationTokenService;
 
 
+    /**
+     * User loadUserByUsername
+     *
+     * @param email
+     * @return user find by email
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
@@ -34,80 +45,133 @@ public class UserServiceImpl implements UserDetailsService,UserService {
     }
 
 
-    public String signUpUser(Users users){
+    /**
+     * User signUpUser
+     * <p>
+     * use to signUp new user and deliver a confirmation token
+     *
+     * @param userEntity
+     * @return new token
+     */
+    public String signUpUser(@NotNull UserEntity userEntity) {
         boolean userExists =
-                userRepository.findByEmail(users.getEmail()).isPresent();
-        if(userExists)  {
-            throw  new IllegalStateException("email not valid");
+                userRepository.findByEmail(userEntity.getEmail()).isPresent();
+        if (userExists) {
+            throw new IllegalStateException("email not valid");
         }
-        String encodedPassword = bCryptPasswordEncoder.encode(users.getPassword());
+        String encodedPassword = bCryptPasswordEncoder.encode(userEntity.getPassword());
 
-        users.setPassword(encodedPassword);
-        userRepository.save(users);
+        userEntity.setPassword(encodedPassword);
+        userRepository.save(userEntity);
 
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(token,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusMinutes(15),
-                users);
+                userEntity);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
 
         return token;
     }
 
+    /**
+     * enableAppUser
+     * use to enable a User
+     *
+     * @param email
+     * @return enable user
+     */
+
     public int enableAppUser(String email) {
         return userRepository.enableAppUser(email);
     }
 
 
+    /**
+     * findAll
+     *
+     * @return All users
+     */
     @Override
-    public Iterable<Users> findAll() {
-        Iterable<Users> users = userRepository.findAll();
+    public Iterable<UserEntity> findAll() {
+        Iterable<UserEntity> users = userRepository.findAll();
         return users;
 
     }
 
+    /**
+     * Users update Users
+     *
+     * @param id
+     * @param userEntity
+     * @return An update User
+     */
     @Override
-    public Optional<Users> updateUsers(Long id, Users users) {
+    public Optional<UserEntity> updateUsers(Long id, UserEntity userEntity) {
 
-        Optional<Users> usersToUpdate = userRepository.findById(id);
+        Optional<UserEntity> usersToUpdate = userRepository.findById(id);
         if (usersToUpdate.isPresent()) {
-            Users currentUsers = usersToUpdate.get();
+            UserEntity currentUserEntity = usersToUpdate.get();
 
-            String firstname = users.getFirstname();
+            String firstname = userEntity.getFirstname();
             if (firstname != null) {
-                currentUsers.setFirstname(firstname);
+                currentUserEntity.setFirstname(firstname);
             }
-            String lastname = users.getLastname();
+            String lastname = userEntity.getLastname();
             if (lastname != null) {
-                currentUsers.setLastname(lastname);
+                currentUserEntity.setLastname(lastname);
             }
-            String email = users.getEmail();
+            String email = userEntity.getEmail();
             if (email != null) {
-                currentUsers.setEmail(email);
+                currentUserEntity.setEmail(email);
             }
-            String civility = users.getCivility();
-            if (civility !=null) {
-                currentUsers.setCivility(civility);
+            String civility = userEntity.getCivility();
+            if (civility != null) {
+                currentUserEntity.setCivility(civility);
             }
 
-            userRepository.save(currentUsers);
+            userRepository.save(currentUserEntity);
             log.info("update Users is a success");
-            return Optional.of(currentUsers);
+            return Optional.of(currentUserEntity);
         }
         log.error("update Users is a fail");
-        return Optional.of(users);
+        return Optional.of(userEntity);
     }
 
 
+    /**
+     * Users findUsersById
+     *
+     * @param id
+     * @return a User
+     */
     @Override
-    public Optional<Users> findUsersById(Long id) {
+    public Optional<UserEntity> findUsersById(Long id) {
         return userRepository.findById(id);
     }
 
+    /**
+     * Users deleteUser
+     * use to delete a user by Id
+     *
+     * @param id
+     */
     @Override
     public void deleteUsersById(Long id) {
         userRepository.deleteById(id);
     }
+
+     public Optional<UserEntity> updateUserWallet(Long id, UserEntity userEntity) {
+
+       Optional<UserEntity> userToUpdate = userRepository.findById(id);
+       if (userToUpdate.isPresent()) {
+           userToUpdate.get().setWallet(userEntity.getWallet());
+           userRepository.save(userToUpdate.get());
+           return userToUpdate;
+       }
+        log.error("user Not found, wallet can't update");
+        return null;
+     }
+
 }

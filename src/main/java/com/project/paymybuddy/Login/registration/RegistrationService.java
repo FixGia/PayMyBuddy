@@ -3,12 +3,13 @@ package com.project.paymybuddy.Login.registration;
 
 import com.project.paymybuddy.Login.Email.EmailSender;
 import com.project.paymybuddy.Login.EmailValidator;
-import com.project.paymybuddy.model.User.Users;
+import com.project.paymybuddy.model.User.UserEntity;
 import com.project.paymybuddy.model.User.AppUserRole;
 import com.project.paymybuddy.model.User.UserServiceImpl;
 import com.project.paymybuddy.Login.token.ConfirmationToken;
 import com.project.paymybuddy.Login.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,13 +24,13 @@ private final UserServiceImpl userService;
 private final ConfirmationTokenService confirmationTokenService;
 private final EmailSender emailSender;
 
-    public String register(RegistrationRequest request){
+    public String register(@NotNull RegistrationRequest request){
 
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if (!isValidEmail){
             throw new IllegalStateException("email not valid");
         }
-        String token = userService.signUpUser(new Users(
+        String token = userService.signUpUser(new UserEntity(
                 request.getFirstName(),
                 request.getLastName(),
                 request.getEmail(),
@@ -66,7 +67,7 @@ private final EmailSender emailSender;
 
         confirmationTokenService.setConfirmedAt(token);
         userService.enableAppUser(
-                confirmationToken.getUsers().getEmail());
+                confirmationToken.getUserEntity().getEmail());
         return "confirmed";
     }
 
