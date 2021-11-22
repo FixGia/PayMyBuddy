@@ -23,4 +23,10 @@ public class RegistrationController {
         return registrationService.confirmToken(token);
 
     }
+
+    @PostMapping("signin")
+    public UserDTO signIn (@RequestBody SignInRequest signInRequest) {
+
+        return registrationService.signIn(signInRequest.getEmail(), signInRequest.getPassword());
+    }
 }

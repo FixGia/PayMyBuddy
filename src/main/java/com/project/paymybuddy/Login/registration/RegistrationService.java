@@ -10,10 +10,14 @@ import com.project.paymybuddy.Login.token.ConfirmationToken;
 import com.project.paymybuddy.Login.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -22,6 +26,7 @@ public class RegistrationService {
 private EmailValidator emailValidator;
 private final UserServiceImpl userService;
 private final ConfirmationTokenService confirmationTokenService;
+private final DaoAuthenticationProvider daoAuthenticationProvider;
 private final EmailSender emailSender;
 
     public String register(@NotNull RegistrationRequest request){
@@ -69,6 +74,21 @@ private final EmailSender emailSender;
         userService.enableAppUser(
                 confirmationToken.getUserEntity().getEmail());
         return "confirmed";
+    }
+
+    public UserDTO signIn(String userName, String password){
+        daoAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(userName,password));
+        UserDetails userDetails = userService.loadUserByUsername(userName);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(userDetails.getUsername());
+        userEntity.setPassword(userDetails.getPassword());
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken(token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                userEntity);
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        return new UserDTO(userEntity.getEmail(), token);
     }
 
     private String buildEmail(String name, String link) {
