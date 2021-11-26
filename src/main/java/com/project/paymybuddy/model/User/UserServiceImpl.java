@@ -1,6 +1,5 @@
 package com.project.paymybuddy.model.User;
 
-import com.project.paymybuddy.Exception.DataNotFoundException;
 import com.project.paymybuddy.Login.token.ConfirmationToken;
 import com.project.paymybuddy.Login.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
@@ -13,8 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,7 +19,7 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserDetailsService,UserService {
+public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
     private final static String USER_NOT_FOUND_MSG = "user with email %s not found";
@@ -38,9 +35,9 @@ public class UserServiceImpl implements UserDetailsService,UserService {
      * @throws UsernameNotFoundException
      */
     @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        return userRepository.findUserEntityByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
     }
 
@@ -55,7 +52,7 @@ public class UserServiceImpl implements UserDetailsService,UserService {
      */
     public String signUpUser(@NotNull UserEntity userEntity) {
         boolean userExists =
-                userRepository.findByEmail(userEntity.getEmail()).isPresent();
+                userRepository.findUserEntityByEmail(userEntity.getEmail()).isPresent();
         if (userExists) {
             throw new IllegalStateException("email not valid");
         }
@@ -70,10 +67,9 @@ public class UserServiceImpl implements UserDetailsService,UserService {
                 LocalDateTime.now().plusMinutes(15),
                 userEntity);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-
         return token;
     }
+
 
     /**
      * enableAppUser

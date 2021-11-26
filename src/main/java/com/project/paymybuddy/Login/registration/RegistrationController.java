@@ -2,6 +2,7 @@ package com.project.paymybuddy.Login.registration;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,8 +25,8 @@ public class RegistrationController {
 
     }
 
-    @PostMapping("signin")
-    public UserDTO signIn (@RequestBody SignInRequest signInRequest) {
+    @PostMapping("signIn")
+    public UserDTO signIn (@RequestBody @NotNull SignInRequest signInRequest) {
 
         return registrationService.signIn(signInRequest.getEmail(), signInRequest.getPassword());
     }

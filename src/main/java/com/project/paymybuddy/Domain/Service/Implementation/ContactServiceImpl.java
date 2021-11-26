@@ -2,6 +2,7 @@ package com.project.paymybuddy.Domain.Service.Implementation;
 
 import com.project.paymybuddy.Domain.Service.ContactService;
 import com.project.paymybuddy.Exception.DataNotFoundException;
+import com.project.paymybuddy.Login.registration.UserDTO;
 import com.project.paymybuddy.model.User.UserEntity;
 import com.project.paymybuddy.model.User.UserRepository;
 import lombok.AllArgsConstructor;
@@ -23,15 +24,15 @@ public class ContactServiceImpl implements ContactService {
      * Users addContact
      * add a Contact in ContactList
      *
-     * @param id
+     * @param userDTO
      * @param email
      * @return A list with one more user into
      */
-    public List<UserEntity> addContact(Long id, String email) {
+    public List<UserEntity> addContact(UserDTO userDTO, String email) {
 
-        Optional<UserEntity> users = userRepository.findById(id);
+        Optional<UserEntity> users = userRepository.findUserEntityByEmail(userDTO.getUserName());
         List<UserEntity> contactList = users.get().getContactList();
-        Optional<UserEntity> contactToAdd = userRepository.findByEmail(email);
+        Optional<UserEntity> contactToAdd = userRepository.findUserEntityByEmail(email);
         if (contactToAdd.isPresent()) {
             UserEntity contact = contactToAdd.get();
             contactList.add(contact);
@@ -41,6 +42,11 @@ public class ContactServiceImpl implements ContactService {
             log.error("Can't add contact to ContactList");
         }
         return contactList;
+    }
+
+    @Override
+    public Optional<UserEntity> findAContactBelongUser(UserDTO userDTO, Long id) {
+        return Optional.empty();
     }
 
     /**
@@ -56,7 +62,7 @@ public class ContactServiceImpl implements ContactService {
         List<UserEntity> contactList = activeUsers.get().getContactList();
 
         if (!contactList.isEmpty()) {
-            Optional<UserEntity> userToDelete = userRepository.findByEmail(email);
+            Optional<UserEntity> userToDelete = userRepository.findUserEntityByEmail(email);
             for (UserEntity user : contactList) {
                 if (user == userToDelete.get()) {
                     try {
@@ -76,19 +82,19 @@ public class ContactServiceImpl implements ContactService {
      * Users findAllContact
      * used to find All User's Contact
      *
-     * @param id
+     * @param userDTO
      * @return a list of All user's contact
      */
-    public List<UserEntity> findEveryContactBelongUser(Long id) {
+    public List<UserEntity> findEveryContactBelongUser(UserDTO userDTO) {
 
         try {
-            Optional<UserEntity> activeUser = userRepository.findById(id);
+            Optional<UserEntity> activeUser = userRepository.findUserEntityByEmail(userDTO.getUserName());
             List<UserEntity> contactList = activeUser.get().getContactList();
             return contactList;
         } catch (DataNotFoundException exception) {
             exception.printStackTrace();
         }
-        log.error("Can't find contactList of user id number :" + id);
+        log.error("Can't find contactList of user {}", userDTO.getUserName());
         return Collections.emptyList();
     }
 
@@ -99,7 +105,7 @@ public class ContactServiceImpl implements ContactService {
             Optional<UserEntity> users = userRepository.findById(id);
             List<UserEntity> contactList = users.get().getContactList();
                 for (UserEntity user : contactList) {
-                    Optional<UserEntity> contactToFind = userRepository.findByEmail(email);
+                    Optional<UserEntity> contactToFind = userRepository.findUserEntityByEmail(email);
                     if (user == contactToFind.get()) {
                         log.debug("Contact was found");
                         return Optional.of(contactToFind.get());
