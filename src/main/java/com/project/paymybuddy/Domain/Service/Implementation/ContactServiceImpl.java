@@ -2,9 +2,9 @@ package com.project.paymybuddy.Domain.Service.Implementation;
 
 import com.project.paymybuddy.Domain.Service.ContactService;
 import com.project.paymybuddy.Exception.DataNotFoundException;
-import com.project.paymybuddy.Login.registration.UserDTO;
-import com.project.paymybuddy.model.User.UserEntity;
-import com.project.paymybuddy.model.User.UserRepository;
+import com.project.paymybuddy.Login.Authentication.UserDTO;
+import com.project.paymybuddy.DAO.User.UserEntity;
+import com.project.paymybuddy.DAO.User.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

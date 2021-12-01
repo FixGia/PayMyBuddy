@@ -2,7 +2,7 @@ package com.project.paymybuddy.Domain.Controller;
 
 import com.project.paymybuddy.Domain.DTO.TransactionDTO;
 import com.project.paymybuddy.Domain.Service.ExternalTransactionService;
-import com.project.paymybuddy.model.Transactions.TransactionEntity;
+import com.project.paymybuddy.DAO.Transactions.TransactionEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

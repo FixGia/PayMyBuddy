@@ -1,32 +1,22 @@
 package com.project.paymybuddy.Login.registration;
 
 
-import com.project.paymybuddy.Login.Email.EmailSender;
-import com.project.paymybuddy.Login.EmailValidator;
-import com.project.paymybuddy.model.User.UserEntity;
-import com.project.paymybuddy.model.User.AppUserRole;
-import com.project.paymybuddy.model.User.UserServiceImpl;
-import com.project.paymybuddy.Login.token.ConfirmationToken;
-import com.project.paymybuddy.Login.token.ConfirmationTokenService;
+import com.project.paymybuddy.DAO.User.UserRepository;
+import com.project.paymybuddy.DAO.User.UserEntity;
+import com.project.paymybuddy.DAO.User.AppUserRole;
+import com.project.paymybuddy.DAO.User.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class RegistrationService {
 
 private EmailValidator emailValidator;
-private final UserServiceImpl userService;
-private final ConfirmationTokenService confirmationTokenService;
-private final DaoAuthenticationProvider daoAuthenticationProvider;
+private final UserRepository userRepository;
+private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public String register(@NotNull RegistrationRequest request){
 
@@ -34,7 +24,7 @@ private final DaoAuthenticationProvider daoAuthenticationProvider;
         if (!isValidEmail){
             throw new IllegalStateException("email not valid");
         }
-        String token = userService.signUpUser(new UserEntity(
+        String token = signUpUser(new UserEntity(
                 request.getFirstName(),
                 request.getLastName(),
                 request.getEmail(),
@@ -44,43 +34,25 @@ private final DaoAuthenticationProvider daoAuthenticationProvider;
         return token;
     }
 
-    @Transactional
-    public String confirmToken(String token) {
-        ConfirmationToken confirmationToken = confirmationTokenService
-                .getToken(token)
-                .orElseThrow(() ->
-                        new IllegalStateException("token not found"));
 
-        if (confirmationToken.getConfirmedAt() != null) {
-            throw new IllegalStateException("email already confirmed");
+    /**
+     * User signUpUser
+     * <p>
+     * use to signUp new user and deliver a confirmation token
+     * @param userEntity
+     * @return message
+     */
+    public String signUpUser(@NotNull UserEntity userEntity) {
+        boolean userExists = userRepository.findUserEntityByEmail(userEntity.getEmail()).isPresent();
+        if (userExists) {
+            throw new IllegalStateException("email not valid");
         }
+        String encodedPassword = bCryptPasswordEncoder.encode(userEntity.getPassword());
+        userEntity.setPassword(encodedPassword);
+        userEntity.setEnabled(true);
+        userRepository.save(userEntity);
 
-        LocalDateTime expiredAt = confirmationToken.getExpiredAt();
-
-        if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("token expired");
-        }
-
-        confirmationTokenService.setConfirmedAt(token);
-        userService.enableAppUser(
-                confirmationToken.getUserEntity().getEmail());
-        return "confirmed";
-    }
-
-    public UserDTO signIn(@NotNull String userName,@NotNull String password){
-
-        UserDetails userDetails = userService.loadUserByUsername(userName);
-        UserEntity userEntity = new UserEntity();
-        userEntity.setEmail(userDetails.getUsername());
-        userEntity.setPassword(userDetails.getPassword());
-        String token = UUID.randomUUID().toString();
-        ConfirmationToken confirmationToken = new ConfirmationToken(token,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(30),
-                userEntity);
-        daoAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(userName,password));
-
-        return new UserDTO(userEntity.getEmail(), confirmationToken.getToken());
+        return "User is signUp";
     }
 
 }

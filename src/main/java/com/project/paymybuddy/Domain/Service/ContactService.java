@@ -1,7 +1,7 @@
 package com.project.paymybuddy.Domain.Service;
 
-import com.project.paymybuddy.Login.registration.UserDTO;
-import com.project.paymybuddy.model.User.UserEntity;
+import com.project.paymybuddy.Login.Authentication.UserDTO;
+import com.project.paymybuddy.DAO.User.UserEntity;
 
 import java.util.List;
 import java.util.Optional;

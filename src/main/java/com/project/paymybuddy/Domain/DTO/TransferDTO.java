@@ -1,7 +1,7 @@
 package com.project.paymybuddy.Domain.DTO;
 
-import com.project.paymybuddy.model.BankAccounts.BankAccountEntity;
-import com.project.paymybuddy.model.User.UserEntity;
+import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntity;
+import com.project.paymybuddy.DAO.User.UserEntity;
 import lombok.*;
 
 @Data

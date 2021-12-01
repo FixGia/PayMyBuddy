@@ -2,7 +2,7 @@ package com.project.paymybuddy.Domain.Service;
 
 
 import com.project.paymybuddy.Domain.DTO.TransactionDTO;
-import com.project.paymybuddy.model.Transactions.TransactionEntity;
+import com.project.paymybuddy.DAO.Transactions.TransactionEntity;
 
 import java.util.Optional;
 

@@ -1,7 +1,7 @@
 package com.project.paymybuddy.Domain.Service;
 
 import com.project.paymybuddy.Domain.DTO.TransferDTO;
-import com.project.paymybuddy.model.Transfers.TransferEntity;
+import com.project.paymybuddy.DAO.Transfers.TransferEntity;
 
 
 public interface InternalTransactionService {
