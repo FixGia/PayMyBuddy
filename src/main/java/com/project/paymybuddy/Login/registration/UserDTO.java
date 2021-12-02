@@ -1,6 +1,5 @@
 package com.project.paymybuddy.Login.registration;
 
-import com.project.paymybuddy.Login.token.ConfirmationToken;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

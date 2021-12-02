@@ -1,45 +1,53 @@
 package com.project.paymybuddy.model.User;
 
-import com.project.paymybuddy.Login.token.ConfirmationToken;
-import com.project.paymybuddy.Login.token.ConfirmationTokenService;
+import com.project.paymybuddy.Login.registration.UserDTO;
+import com.project.paymybuddy.Login.registration.token.ConfirmationToken;
+import com.project.paymybuddy.Login.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
 @AllArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserDetailsService, UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
-    private final static String USER_NOT_FOUND_MSG = "user with email %s not found";
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
 
-    /**
-     * User loadUserByUsername
-     *
-     * @param email
-     * @return user find by email
-     * @throws UsernameNotFoundException
-     */
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        return userRepository.findUserEntityByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        UserEntity user = userRepository.findByEmail(username);
+        if (user == null) {
+            log.error("User not Found in the DB");
+            throw new UsernameNotFoundException("User not Found in Db");
+        } else {
+            log.info("User found in the Db {}", username);
+        }
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        user.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        });
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
+
 
 
     /**
@@ -51,12 +59,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @return new token
      */
     public String signUpUser(@NotNull UserEntity userEntity) {
-        boolean userExists =
-                userRepository.findUserEntityByEmail(userEntity.getEmail()).isPresent();
-        if (userExists) {
+        UserEntity userExists =
+                userRepository.findByEmail(userEntity.getEmail());
+        if (userExists != null) {
             throw new IllegalStateException("email not valid");
         }
-        String encodedPassword = bCryptPasswordEncoder.encode(userEntity.getPassword());
+        String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
 
         userEntity.setPassword(encodedPassword);
         userRepository.save(userEntity);
@@ -78,23 +86,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @param email
      * @return enable user
      */
-
     public int enableAppUser(String email) {
         return userRepository.enableAppUser(email);
     }
 
 
-    /**
-     * findAll
-     *
-     * @return All users
-     */
-    @Override
-    public Iterable<UserEntity> findAll() {
-        Iterable<UserEntity> users = userRepository.findAll();
-        return users;
-
-    }
 
     /**
      * Users update Users
@@ -135,17 +131,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return Optional.of(userEntity);
     }
 
-
-    /**
-     * Users findUsersById
-     *
-     * @param id
-     * @return a User
-     */
     @Override
     public Optional<UserEntity> findUsersById(Long id) {
         return userRepository.findById(id);
     }
+
 
     /**
      * Users deleteUser
@@ -170,4 +160,45 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return null;
      }
 
+    @Override
+    public UserEntity saveUser(@NotNull UserEntity user) {
+        log.info("Saving  new User {} to the DB", user.getEmail());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+
+    @Override
+    public Role saveRole(@NotNull Role role) {
+        log.info("Saving new role {} to the DB", role.getName());
+        return roleRepository.save(role);
+    }
+
+
+
+    @Override
+    public void addRoleToUser(String username, String roleName) {
+        UserEntity user = userRepository.findByEmail(username);
+        Role role = roleRepository.findByName(roleName);
+        user.getRoles().add(role);
+
+    }
+
+    @Override
+    public UserEntity getUser(String username) {
+        return userRepository.findByEmail(username);
+    }
+
+    @Override
+    public List<UserEntity> getUsers() {
+        return userRepository.findAll();
+    }
+
+
+    public UserEntity getCurrentUser() {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        return userRepository.findByEmail(username);
+    }
 }

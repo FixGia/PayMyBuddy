@@ -5,7 +5,9 @@ import com.project.paymybuddy.Login.registration.RegistrationService;
 import com.project.paymybuddy.Login.registration.UserDTO;
 import com.project.paymybuddy.model.User.UserEntity;
 import com.project.paymybuddy.model.User.UserRepository;
+import com.project.paymybuddy.model.User.UserService;
 import lombok.AllArgsConstructor;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,25 +23,24 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/v1/registration/contacts")
+@RequestMapping("/api/user")
 
 public class ContactController {
 
     ContactService contactService;
     RegistrationService registrationService;
     UserRepository userRepository;
-    DaoAuthenticationProvider daoAuthenticationProvider;
+    UserService userService;
     AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
 
 
-    @GetMapping
-    public ResponseEntity<List<UserEntity>> displayedContactList(@NotNull UserDTO userDTO) throws Exception {
+    @GetMapping("/contacts")
+    public ResponseEntity<List<UserEntity>> displayedContactList() throws Exception {
 
-
-        List<UserEntity> contactList = contactService.findEveryContactBelongUser(userDTO);
-            return new ResponseEntity<>(contactList, HttpStatus.CREATED);
+        List<UserEntity> contactList = contactService.findEveryContactBelongUser();
+            return new ResponseEntity<>(contactList, HttpStatus.OK);
 
     }
 

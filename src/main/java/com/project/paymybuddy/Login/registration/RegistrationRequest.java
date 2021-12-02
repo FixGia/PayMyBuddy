@@ -1,6 +1,8 @@
 package com.project.paymybuddy.Login.registration;
 
+import com.project.paymybuddy.model.User.Role;
 import lombok.*;
+
 
 @Getter
 @AllArgsConstructor
@@ -14,4 +16,5 @@ public class RegistrationRequest {
     private final String civility;
     private final String password;
     private final String email;
+
 }

@@ -1,4 +1,4 @@
-package com.project.paymybuddy.Login.token;
+package com.project.paymybuddy.Login.registration.token;
 
 import com.project.paymybuddy.model.User.UserEntity;
 import lombok.Getter;

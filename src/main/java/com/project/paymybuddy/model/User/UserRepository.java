@@ -13,7 +13,7 @@ import java.util.Optional;
 @Transactional(readOnly= true)
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    Optional<UserEntity> findUserEntityByEmail(String email);
+    UserEntity findByEmail(String email);
 
     @Transactional
     @Modifying

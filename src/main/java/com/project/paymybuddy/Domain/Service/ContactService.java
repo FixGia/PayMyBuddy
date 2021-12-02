@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ContactService  {
 
-    List<UserEntity> findEveryContactBelongUser(UserDTO userDTO);
+    List<UserEntity> findEveryContactBelongUser();
 
     Optional<UserEntity> findAContactBelongUser (UserDTO userDTO, Long id);
 

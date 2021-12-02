@@ -5,7 +5,6 @@ import java.util.Optional;
 
 public interface UserService {
 
-    Iterable<UserEntity> findAll();
 
     Optional<UserEntity> updateUsers(Long id, UserEntity userEntity);
 
@@ -15,6 +14,16 @@ public interface UserService {
 
     Optional<UserEntity> updateUserWallet(Long id, UserEntity userEntity);
 
+    UserEntity saveUser(UserEntity user);
 
+    Role saveRole(Role role);
+
+    UserEntity getCurrentUser();
+
+    void addRoleToUser(String username, String roleName);
+
+    UserEntity getUser(String username);
+
+    List<UserEntity> getUsers();
 
 }

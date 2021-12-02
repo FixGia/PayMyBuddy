@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path ="api/v1/registration")
+@RequestMapping(path ="login")
 @AllArgsConstructor
 @Slf4j
 public class RegistrationController {
@@ -25,9 +25,4 @@ public class RegistrationController {
 
     }
 
-    @PostMapping("signIn")
-    public UserDTO signIn (@RequestBody @NotNull SignInRequest signInRequest) {
-
-        return registrationService.signIn(signInRequest.getEmail(), signInRequest.getPassword());
-    }
 }

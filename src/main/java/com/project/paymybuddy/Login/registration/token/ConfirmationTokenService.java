@@ -1,4 +1,4 @@
-package com.project.paymybuddy.Login.token;
+package com.project.paymybuddy.Login.registration.token;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
