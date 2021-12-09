@@ -1,23 +1,17 @@
 package com.project.paymybuddy.Domain.Controller;
 
-import com.project.paymybuddy.Domain.Service.ContactService;
-import com.project.paymybuddy.Login.registration.RegistrationService;
-import com.project.paymybuddy.Login.registration.UserDTO;
-import com.project.paymybuddy.model.User.UserEntity;
-import com.project.paymybuddy.model.User.UserRepository;
-import com.project.paymybuddy.model.User.UserService;
+import com.project.paymybuddy.Domain.Service.Implementation.ContactServiceImpl;
+import com.project.paymybuddy.Registration.RegistrationService;
+import com.project.paymybuddy.DAO.User.UserEntity;
+import com.project.paymybuddy.DAO.User.UserRepository;
+import com.project.paymybuddy.DAO.User.UserService;
 import lombok.AllArgsConstructor;
-import org.apache.tomcat.util.http.parser.Authorization;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +21,7 @@ import java.util.Optional;
 
 public class ContactController {
 
-    ContactService contactService;
+    ContactServiceImpl contactService;
     RegistrationService registrationService;
     UserRepository userRepository;
     UserService userService;
@@ -41,14 +35,27 @@ public class ContactController {
 
         List<UserEntity> contactList = contactService.findEveryContactBelongUser();
             return new ResponseEntity<>(contactList, HttpStatus.OK);
-
     }
 
-    @PostMapping
-    public ResponseEntity<List<UserEntity>> addContactToContactList(UserDTO userDTO, String email){
+    @GetMapping("/contact")
+    public ResponseEntity<Optional<UserEntity>> displayedContact(@RequestParam String email){
+        Optional<UserEntity> userEntity = contactService.findAContactBelongUser(email);
+        return  new ResponseEntity<>(userEntity, HttpStatus.OK);
+    }
 
-        List<UserEntity> contactList = contactService.addContact(userDTO, email);
+    @PostMapping("/contacts")
+    public ResponseEntity<List<UserEntity>> addContactToContactList(@RequestParam String email){
+
+        List<UserEntity> contactList = contactService.addContact(email);
 
         return new ResponseEntity<>(contactList, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/contacts")
+    public ResponseEntity<List<UserEntity>> deleteContactInContactList(@RequestParam String email) {
+
+        contactService.deleteContactInContactList(email);
+
+        return ResponseEntity.ok(contactService.findEveryContactBelongUser());
     }
 }

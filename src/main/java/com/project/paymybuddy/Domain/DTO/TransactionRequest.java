@@ -1,12 +1,9 @@
 package com.project.paymybuddy.Domain.DTO;
 
-import com.project.paymybuddy.DAO.User.UserEntity;
-import lombok.*;
-
+import lombok.Data;
 
 @Data
-public class TransactionDTO {
-
+public class TransactionRequest {
 
     private double amount;
     private String beneficiary;

@@ -1,30 +1,34 @@
 package com.project.paymybuddy.Domain.Util;
 
-import com.project.paymybuddy.Domain.DTO.BankAccountDTO;
+import com.project.paymybuddy.DAO.User.UserEntity;
+import com.project.paymybuddy.DAO.User.UserService;
+import com.project.paymybuddy.Domain.DTO.BankAccountRequest;
 import com.project.paymybuddy.Domain.DTO.TransactionDTO;
-import com.project.paymybuddy.Domain.DTO.TransferDTO;
+import com.project.paymybuddy.Domain.DTO.TransferRequest;
 import com.project.paymybuddy.Exception.NotConformDataException;
-import com.project.paymybuddy.model.BankAccounts.BankAccountEntity;
-import com.project.paymybuddy.model.Transactions.TransactionEntity;
-import com.project.paymybuddy.model.Transfers.TransferEntity;
-import com.project.paymybuddy.model.User.UserEntity;
+import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntity;
+import com.project.paymybuddy.DAO.Transactions.TransactionEntity;
+import com.project.paymybuddy.DAO.Transfers.TransferEntity;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class MapDAO {
 
+    private final UserService userService;
+    private static final double COMMISSION = 0.05;
 
-    public TransferEntity TransferEntityMapper(@NotNull TransferDTO transfer) {
+    public TransferEntity TransferEntityMapper(@NotNull TransferRequest transfer) {
 
         TransferEntity transferEntity = new TransferEntity();
 
-       try{ transferEntity.setId(transfer.getId());
-        transferEntity.setAmount(transfer.getAmount());
-        transferEntity.setCredit(transfer.getCredit());
-        log.debug("Update TransferEntity is a success");
+       try{
+           transferEntity.setAmount(transfer.getAmount());
+           log.debug("Update TransferEntity is a success");
         return transferEntity;
     } catch (NotConformDataException e ){
            e.printStackTrace();
@@ -33,16 +37,14 @@ public class MapDAO {
        return null;
     }
 
-    public TransferDTO TransferMapper(@NotNull TransferEntity transferEntity) {
+    public TransferRequest TransferMapper(@NotNull TransferEntity transferEntity) {
 
-        TransferDTO transferDTO = new TransferDTO();
+        TransferRequest transferRequest = new TransferRequest();
 
         try {
-            transferDTO.setId(transferEntity.getId());
-            transferDTO.setAmount(transferEntity.getAmount());
-            transferDTO.setCredit(transferEntity.getCredit());
+            transferRequest.setAmount(transferEntity.getAmount());
             log.debug("Update Transfer is a success");
-            return transferDTO;
+            return transferRequest;
         } catch (NotConformDataException e) {
             e.printStackTrace();
         }
@@ -55,8 +57,7 @@ public class MapDAO {
         try {
             transactionDTO.setAmount(transactionEntity.getAmount());
             transactionDTO.setDescription(transactionEntity.getDescription());
-            transactionDTO.setId(transactionEntity.getId());
-            transactionDTO.setCommission(transactionEntity.getCommission());
+
 
             log.debug("Update Transaction is a success");
             return transactionDTO;
@@ -74,8 +75,11 @@ public class MapDAO {
         try {
             transactionEntity.setAmount(transactionDTO.getAmount());
             transactionEntity.setDescription(transactionDTO.getDescription());
-            transactionEntity.setId(transactionDTO.getId());
-            transactionEntity.setCommission(transactionDTO.getCommission());
+            UserEntity beneficiary = userService.getUser(transactionDTO.getBeneficiary());
+            UserEntity payer = userService.getUser(transactionDTO.getPayer());
+            transactionEntity.setBeneficiary(beneficiary);
+            transactionEntity.setPayer(payer);
+            transactionEntity.setCommission(transactionDTO.getAmount()*COMMISSION);
             log.debug("Update TransactionEntity is a success");
             return transactionEntity;
         } catch (NotConformDataException e) {
@@ -84,29 +88,28 @@ public class MapDAO {
         log.error("Can't update TransactionEntity");
         return null;
     }
-    public BankAccountDTO BankAccountMapper(@NotNull BankAccountEntity bankAccountEntity) {
+    public BankAccountRequest BankAccountMapper(@NotNull BankAccountEntity bankAccountEntity) {
 
-        BankAccountDTO bankAccountDTO = new BankAccountDTO();
+        BankAccountRequest bankAccountRequest = new BankAccountRequest();
 
         try {
-        bankAccountDTO.setIdBankAccount(bankAccountEntity.getIdBankAccount());
-        bankAccountDTO.setRib(bankAccountEntity.getRib());
-        bankAccountDTO.setAmount(bankAccountEntity.getAmount());
+
+        bankAccountRequest.setIban(bankAccountEntity.getIban());
+        bankAccountRequest.setAmount(bankAccountEntity.getAmount());
         log.debug("Update BankAccount is a success");
-        return bankAccountDTO;
+        return bankAccountRequest;
     } catch (NotConformDataException e) {
             e.printStackTrace();
         }
     log.error("Can't update BankAccount with BankAccountEntity");
         return null;
     }
-    public BankAccountEntity BankAccountEntityMapper(@NotNull BankAccountDTO bankAccountDTO) {
+    public BankAccountEntity BankAccountEntityMapper(@NotNull BankAccountRequest bankAccountRequest) {
 
         BankAccountEntity bankAccountEntity = new BankAccountEntity();
 
         try {
-            bankAccountEntity.setIdBankAccount(bankAccountDTO.getIdBankAccount());
-            bankAccountEntity.setRib(bankAccountDTO.getRib());
+            bankAccountEntity.setIban(bankAccountRequest.getIban());
             bankAccountEntity.setAmount(bankAccountEntity.getAmount());
             log.debug("Update BankAccountEntity is a success");
             return bankAccountEntity;

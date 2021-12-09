@@ -1,20 +1,25 @@
 package com.project.paymybuddy.Domain.Service.Implementation;
-import com.project.paymybuddy.Domain.DTO.TransferDTO;
+import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntity;
+import com.project.paymybuddy.DAO.User.UserEntity;
+import com.project.paymybuddy.Domain.DTO.TransferRequest;
+import com.project.paymybuddy.Domain.Service.InternalTransactionService;
 import com.project.paymybuddy.Domain.Util.MapDAO;
 import com.project.paymybuddy.Exception.BalanceInsufficientException;
 import com.project.paymybuddy.Exception.NotConformDataException;
-import com.project.paymybuddy.model.BankAccounts.BankAccountService;
-import com.project.paymybuddy.model.Transfers.TransferEntity;
-import com.project.paymybuddy.model.Transfers.TransferService;
-import com.project.paymybuddy.model.User.UserService;
+import com.project.paymybuddy.DAO.BankAccounts.BankAccountService;
+import com.project.paymybuddy.DAO.Transfers.TransferEntity;
+import com.project.paymybuddy.DAO.Transfers.TransferService;
+import com.project.paymybuddy.DAO.User.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @AllArgsConstructor
 @Service
 @Slf4j
-public class InternalTransactionServiceImpl {
+public class InternalTransactionServiceImpl implements InternalTransactionService {
 
     private static final double DESCRIPTION_LENGTH = 30;
 
@@ -23,22 +28,34 @@ public class InternalTransactionServiceImpl {
     TransferService transferService;
     MapDAO mapDAO;
 
-    public TransferEntity makeWalletDebitToBankAccountTransfer(TransferDTO transferDTO) {
+    @Transactional
+    public TransferEntity makeWalletDebitToBankAccountTransfer(TransferRequest transferRequest) {
+
+        UserEntity currentUsers = userService.getCurrentUser();
 
         try {
-            prepareTransfer(transferDTO);
+            prepareTransfer(transferRequest);
 
-            CalculateQualifyDebitTransfer(transferDTO);
+            CalculateQualifyDebitTransfer(transferRequest);
 
-            updateBankAccountAndUserAfterDebitTransfer(transferDTO);
+            updateBankAccountAndUserAfterDebitTransfer(transferRequest);
 
-            saveEffectiveTransfer(transferDTO);
+            saveEffectiveTransfer(transferRequest);
 
-            userService.updateUsers(transferDTO.getUser().getId(), transferDTO.getUser());
+            userService.updateUsers(currentUsers);
 
-            bankAccountService.updateBankAccount(transferDTO.getBankAccount().getIdBankAccount(), transferDTO.getBankAccount());
+            bankAccountService.updateBankAccount(bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get());
 
-            TransferEntity transfer = mapDAO.TransferEntityMapper(transferDTO);
+            //**
+            /* Set parameters for transfer entity
+             */
+            TransferEntity transfer = mapDAO.TransferEntityMapper(transferRequest);
+            transfer.setDebit(transferRequest.getAmount());
+            BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get();
+            transfer.setBankAccount(userBankAccount);
+            transfer.setUserEntity(currentUsers);
+            transfer.setDescription(transferRequest.getDescription());
+
 
             transferService.saveTransfer(transfer);
 
@@ -52,28 +69,43 @@ public class InternalTransactionServiceImpl {
         return null;
     }
 
-    public TransferEntity makeWalletCreditToBankAccountTransfer(TransferDTO transferDTO) {
+    @Transactional
+    public TransferEntity makeWalletCreditToBankAccountTransfer(TransferRequest transferRequest) {
+
+        UserEntity currentUsers = userService.getCurrentUser();
 
         try {
 
-            prepareTransfer(transferDTO);
+            prepareTransfer(transferRequest);
 
-            CalculateQualifyCreditTransfer(transferDTO);
+            CalculateQualifyCreditTransfer(transferRequest);
 
-            updateBankAccountAndUserAfterCreditTransfer(transferDTO);
+            updateBankAccountAndUserAfterCreditTransfer(transferRequest);
 
-            saveEffectiveTransfer(transferDTO);
+            saveEffectiveTransfer(transferRequest);
 
-            userService.updateUsers(transferDTO.getUser().getId(), transferDTO.getUser());
+            userService.updateUsers(userService.getCurrentUser());
 
-            bankAccountService.updateBankAccount(transferDTO.getBankAccount().getIdBankAccount(), transferDTO.getBankAccount());
+            bankAccountService.updateBankAccount(bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get());
 
-            TransferEntity transfer = mapDAO.TransferEntityMapper(transferDTO);
+            //**
+            /* Set parameters for transfer entity
+             */
+            TransferEntity transfer = mapDAO.TransferEntityMapper(transferRequest);
+            transfer.setCredit(transferRequest.getAmount());
+            BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get();
+            transfer.setBankAccount(userBankAccount);
+            transfer.setUserEntity(currentUsers);
+            transfer.setDescription(transferRequest.getDescription());
 
+            //**
+            /* Save transfer entity
+             */
             transferService.saveTransfer(transfer);
 
             log.info("Transfer Credit Success");
             return transfer;
+
         } catch (NotConformDataException e) {
             e.printStackTrace();
 
@@ -83,28 +115,28 @@ public class InternalTransactionServiceImpl {
     }
 
 
-    public void prepareTransfer(TransferDTO transferDTO) {
+    public void prepareTransfer(@NotNull TransferRequest transferRequest) {
 
-        if(!userService.findUsersById(transferDTO
-                .getUser().getId()).isPresent()) {
+       UserEntity currentUser = userService.getCurrentUser();
+       if(currentUser == null) {
             throw new NotConformDataException("Owner cannot be null");
         }
-        if (!bankAccountService.findBankAccountById(transferDTO.getBankAccount()
-                .getIdBankAccount()).isPresent()) {
+        if (!bankAccountService.findBankAccountByUserEmail(currentUser.getEmail()).isPresent()) {
             throw new NotConformDataException("BankAccount cannot be null");
         }
-        if(transferDTO.getDescription().length() > DESCRIPTION_LENGTH){
+        if(transferRequest.getDescription().length() > DESCRIPTION_LENGTH){
             throw new NotConformDataException("description must be 30 characters maximum");
         }
-        if(transferDTO.getAmount() <= 0){
+        if(transferRequest.getAmount() <= 0){
             throw new BalanceInsufficientException("amount must be positive value");
         }
     }
 
-    public boolean CalculateQualifyDebitTransfer(TransferDTO transferDTO) {
+    public boolean CalculateQualifyDebitTransfer(@NotNull TransferRequest transferRequest) {
 
-        double wallet = transferDTO.getUser().getWallet();
-        double amount = transferDTO.getAmount();
+        UserEntity currentUser = userService.getCurrentUser();
+        double wallet = currentUser.getWallet();
+        double amount = transferRequest.getAmount();
         if (wallet - amount >= 0) {
             log.info("Wallet is sufficient to do Transfer");
             return true;
@@ -113,10 +145,11 @@ public class InternalTransactionServiceImpl {
         return false;
     }
 
-    public boolean CalculateQualifyCreditTransfer(TransferDTO transferDTO) {
+    public boolean CalculateQualifyCreditTransfer(@NotNull TransferRequest transferRequest) {
 
-    double wallet = transferDTO.getBankAccount().getAmount();
-    double amount = transferDTO.getAmount();
+        UserEntity currentUser = userService.getCurrentUser();
+    double wallet = currentUser.getWallet();
+    double amount = transferRequest.getAmount();
         if (wallet - amount >= 0) {
             log.info("Wallet is sufficient to do Transfer");
             return true;
@@ -124,31 +157,39 @@ public class InternalTransactionServiceImpl {
         log.info("Wallet is not sufficient to do Transfer");
         return false;
     }
-    public void updateBankAccountAndUserAfterDebitTransfer(TransferDTO transferDTO) {
-    try {
-        double newWalletUser = (transferDTO.getUser().getWallet() - (transferDTO.getAmount()));
-        transferDTO.getUser().setWallet(newWalletUser);
-        double newAmountBankAccount = (transferDTO.getBankAccount().getAmount()) - (transferDTO.getAmount());
-        transferDTO.getBankAccount().setAmount(newAmountBankAccount);
+
+    public void updateBankAccountAndUserAfterDebitTransfer(@NotNull TransferRequest transferRequest) {
+        UserEntity currentUser = userService.getCurrentUser();
+        try {
+        double newWalletUser = (currentUser.getWallet() - (transferRequest.getAmount()));
+        currentUser.setWallet(newWalletUser);
+
+        BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUser.getEmail()).get();
+
+        double newAmountBankAccount = (userBankAccount.getAmount()) - (transferRequest.getAmount());
+        userBankAccount.setAmount(newAmountBankAccount);
     } catch (ArithmeticException e) {
         e.printStackTrace();
     }
 }
 
-    public void updateBankAccountAndUserAfterCreditTransfer(TransferDTO transferDTO) {
-    try {
-        double newWalletUser = (transferDTO.getUser().getWallet() + ( transferDTO.getAmount()));
-        transferDTO.getUser().setWallet(newWalletUser);
-        double newAmountBankAccount = (transferDTO.getBankAccount().getAmount() + (transferDTO.getAmount()));
-        transferDTO.getBankAccount().setAmount(newAmountBankAccount);
+    public void updateBankAccountAndUserAfterCreditTransfer(@NotNull TransferRequest transferRequest) {
+        UserEntity currentUser = userService.getCurrentUser();
+        try {
+        double newWalletUser = (currentUser.getWallet() + ( transferRequest.getAmount()));
+        currentUser.setWallet(newWalletUser);
+            BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUser.getEmail()).get();
+        double newAmountBankAccount = (userBankAccount.getAmount() + (transferRequest.getAmount()));
+        userBankAccount.setAmount(newAmountBankAccount);
 }
     catch (ArithmeticException e) {
         e.printStackTrace();
     }
 }
-    public TransferEntity saveEffectiveTransfer(TransferDTO transferDTO) {
 
-    TransferEntity transfer = mapDAO.TransferEntityMapper(transferDTO);
+    public TransferEntity saveEffectiveTransfer(TransferRequest transferRequest) {
+
+    TransferEntity transfer = mapDAO.TransferEntityMapper(transferRequest);
     transferService.saveTransfer(transfer);
     return transfer;
 }

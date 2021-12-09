@@ -2,10 +2,10 @@ package com.project.paymybuddy.Domain.Service.Implementation;
 
 import com.project.paymybuddy.Domain.Service.ContactService;
 import com.project.paymybuddy.Exception.DataNotFoundException;
-import com.project.paymybuddy.Login.registration.UserDTO;
-import com.project.paymybuddy.model.User.UserEntity;
-import com.project.paymybuddy.model.User.UserRepository;
-import com.project.paymybuddy.model.User.UserService;
+import com.project.paymybuddy.Registration.UserDTO;
+import com.project.paymybuddy.DAO.User.UserEntity;
+import com.project.paymybuddy.DAO.User.UserRepository;
+import com.project.paymybuddy.DAO.User.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,49 +26,67 @@ public class ContactServiceImpl implements ContactService {
      * Users addContact
      * add a Contact in ContactList
      *
-     * @param userDTO
-     * @param email
      * @return A list with one more user into
      */
-    public List<UserEntity> addContact(UserDTO userDTO, String email) {
+    public List<UserEntity> addContact(String email) {
 
-        UserEntity users = userRepository.findByEmail(userDTO.getUserName());
-        List<UserEntity> contactList = users.getContactList();
-        Optional<UserEntity> contactToAdd = Optional.ofNullable(userRepository.findByEmail(email));
-        if (contactToAdd.isPresent()) {
-            UserEntity contact = contactToAdd.get();
-            contactList.add(contact);
-            userRepository.save(users);
-            log.info("add a new contact in ContactList");
-        } else {
-            log.error("Can't add contact to ContactList");
+        UserEntity currentUser = userService.getCurrentUser();
+
+        try {
+            List<UserEntity> contactList = currentUser.getContactList();
+            UserEntity contactToAdd = userService.getUser(email);
+            if (contactToAdd != null) {
+                contactList.add(contactToAdd);
+                userRepository.save(currentUser);
+                log.info("add a new contact in ContactList");
+                return contactList;
+            }
+
+        } catch (DataNotFoundException exception) {
+
+            log.error("ContactList of {} not found", currentUser);
+            exception.printStackTrace();
         }
-        return contactList;
+        log.error("Can't add a new contact in ContactList");
+        return Collections.emptyList();
     }
+
 
     @Override
-    public Optional<UserEntity> findAContactBelongUser(UserDTO userDTO, Long id) {
-        return Optional.empty();
+    public Optional<UserEntity> findAContactBelongUser(String email) {
+
+        UserEntity currentUser = userService.getCurrentUser();
+        List<UserEntity> contactList = currentUser.getContactList();
+        UserEntity userToFind = userService.getUser(email);
+
+        if (contactList.contains(userToFind)) {
+            log.info("Contact has been found");
+            return Optional.of(userToFind);
+        }
+        throw new DataNotFoundException ("Contact isn't present");
+
     }
+
+
+
 
     /**
      * Users deleteContact
      * delete a contact in user's contactList
      *
-     * @param id
      * @param email
      */
-    public void deleteContact(Long id, String email) {
+    public void deleteContactInContactList(String email) {
 
-        Optional<UserEntity> activeUsers = userRepository.findById(id);
-        List<UserEntity> contactList = activeUsers.get().getContactList();
+        UserEntity currentUser = userService.getCurrentUser();
+        List<UserEntity> contactList = currentUser.getContactList();
+        UserEntity userToDelete = userService.getUser(email);
 
-        if (!contactList.isEmpty()) {
-            Optional<UserEntity> userToDelete = Optional.ofNullable(userRepository.findByEmail(email));
-            for (UserEntity user : contactList) {
-                if (user == userToDelete.get()) {
+        if (userToDelete != null) {
+            if (contactList.contains(userToDelete))
                     try {
-                        userRepository.delete(user);
+                        contactList.remove(userToDelete);
+                        userService.saveUser(currentUser);
                         log.info(" Contact has been deleted");
                     } catch (DataNotFoundException exception) {
                         log.error("Cant delete contact because he doesn't exist in DB");
@@ -76,8 +94,6 @@ public class ContactServiceImpl implements ContactService {
                     }
                 } else log.error(" userToDelete not found");
             }
-        } else log.error("contactList is empty");
-    }
 
 
     /**
@@ -89,6 +105,7 @@ public class ContactServiceImpl implements ContactService {
     public List<UserEntity> findEveryContactBelongUser() {
 
         UserEntity currentUser = userService.getCurrentUser();
+
         try {
 
             List<UserEntity> contactList = currentUser.getContactList();
