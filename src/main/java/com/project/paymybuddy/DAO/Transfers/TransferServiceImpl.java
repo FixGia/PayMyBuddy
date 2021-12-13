@@ -44,13 +44,14 @@ public class TransferServiceImpl implements TransferService {
     public Optional<TransferEntity> deleteTransfer(Long id) {
 
         try {
-            log.info(" transfer id:" + id + "was deleted");
+
             Optional<TransferEntity> transferToDelete = transferRepository.findById(id);
             transferRepository.delete(transferToDelete.get());
+            log.info(" transfer id:" + id + "was deleted");
         } catch (DataNotFoundException dataNotFoundException) {
             dataNotFoundException.printStackTrace();
+            log.error(" Data was not found");
         }
-        log.error(" Data was not found");
         return Optional.empty();
     }
 

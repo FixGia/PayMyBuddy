@@ -5,17 +5,16 @@ import java.util.Optional;
 
 public interface TransactionService {
 
-    Iterable<TransactionEntity> findAllTransactions(Long id);
 
     List<TransactionEntity> findAllTransactionsByBeneficiaryEmail(String email);
 
     List<TransactionEntity> findAllTransactionsByPayerEmail(String email);
 
-    Optional<TransactionEntity> findTransactionById(Long id);
-
-    Optional<TransactionEntity> deleteTransactionByEmail(String email);
-
     TransactionEntity saveTransaction(TransactionEntity transactionEntity);
 
-    Optional<TransactionEntity> updateTransaction(TransactionEntity transactionEntity, Long id);
+    Optional<TransactionEntity> saveNewTransaction(Long id, TransactionEntity transactionEntity);
+
+    Iterable<TransactionEntity> findAllTransactions(Long id);
+
+    Optional<TransactionEntity> findTransactionById(Long id);
 }

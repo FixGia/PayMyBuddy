@@ -25,10 +25,13 @@ public class BankAccountServiceImpl implements BankAccountService {
 
 
     @Override
-    public Iterable<BankAccountEntity> findAllBankAccountByUserEmail(String email) {
+    public Iterable<BankAccountEntity> findAllBankAccountByUserEmail(@NotNull String email) {
+
         try {
+            List<BankAccountEntity> bankAccountEntities = bankAccountEntityRepository.findAllByUserEmail(email);
             log.info("All BankAccount was found");
-            return bankAccountEntityRepository.findAllByUserEmail(email);
+            return bankAccountEntities;
+
         } catch (DataNotFoundException dataNotFoundException) {
             dataNotFoundException.printStackTrace();
         }
@@ -38,7 +41,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 
 
     @Override
-    public Optional<BankAccountEntity> findBankAccountByUserEmail(String email) {
+    public Optional<BankAccountEntity> findBankAccountByUserEmail(@NotNull String email) {
         try {
             log.info(" BankAccount Belong to: {} was found ", email);
             return bankAccountEntityRepository.findBankAccountEntityByUserEmail(email);
@@ -63,6 +66,7 @@ public class BankAccountServiceImpl implements BankAccountService {
                     currentBankAccount.setAmount(amount);
                 }
                 log.info("bankAccount was updated !");
+                bankAccountEntityRepository.save(currentBankAccount);
                 return Optional.of(currentBankAccount);
             }
         } catch (DataNotFoundException exception) {
@@ -75,13 +79,13 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public void deleteByUserEmail(String email) {
         try {
-            log.info(" BankAccount Belong to: {} was deleted", email);
             Optional<BankAccountEntity> bankAccountToDelete = bankAccountEntityRepository.findBankAccountEntityByUserEmail(email);
             bankAccountEntityRepository.delete(bankAccountToDelete.get());
+            log.info(" BankAccount Belong to: {} was deleted", email);
         } catch (DataNotFoundException dataNotFoundException) {
             dataNotFoundException.printStackTrace();
+            log.error(" Data was not found");
         }
-        log.error(" Data was not found");
     }
 
     @Transactional

@@ -6,12 +6,16 @@ import com.project.paymybuddy.DAO.User.UserEntity;
 import com.project.paymybuddy.DAO.User.UserRepository;
 import com.project.paymybuddy.DAO.User.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,16 +26,13 @@ import java.util.Optional;
 public class ContactController {
 
     ContactServiceImpl contactService;
-    RegistrationService registrationService;
-    UserRepository userRepository;
-    UserService userService;
-    AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
 
 
     @GetMapping("/contacts")
-    public ResponseEntity<List<UserEntity>> displayedContactList() throws Exception {
+    public ResponseEntity<List<UserEntity>> displayedContactList(@RequestHeader ("Authorization") String token) throws Exception {
+
 
         List<UserEntity> contactList = contactService.findEveryContactBelongUser();
             return new ResponseEntity<>(contactList, HttpStatus.OK);

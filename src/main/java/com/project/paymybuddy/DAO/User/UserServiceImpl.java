@@ -127,8 +127,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserEntity saveUser(@NotNull UserEntity user) {
-        log.info("Saving  new User {} to the DB", user.getEmail());
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        log.info("Saving  new User {} to the DB", user.getEmail());
         return userRepository.save(user);
     }
 

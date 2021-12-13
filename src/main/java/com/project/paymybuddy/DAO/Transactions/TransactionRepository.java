@@ -12,4 +12,6 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     List<TransactionEntity> findTransactionEntitiesByPayer_Email(String email);
 
 
+
+
 }

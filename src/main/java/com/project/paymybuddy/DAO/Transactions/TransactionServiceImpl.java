@@ -73,18 +73,6 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 
-    @Override
-    public Optional<TransactionEntity> deleteTransaction(Long id) {
-        try {
-            log.info(" transaction id:"+ id+ "was deleted");
-            Optional<TransactionEntity> transactionToDelete = transactionRepository.findById(id);
-            transactionRepository.delete(transactionToDelete.get());
-        } catch (DataNotFoundException dataNotFoundException) {
-            dataNotFoundException.printStackTrace();
-        }
-        log.error(" Data was not found");
-        return Optional.empty();
-    }
 
     @Override
     public TransactionEntity saveTransaction(TransactionEntity transactionEntity) {
@@ -93,9 +81,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     }
 
-
     @Override
-    public Optional<TransactionEntity> updateTransaction(TransactionEntity transactionEntity, Long id) {
+    public Optional<TransactionEntity> saveNewTransaction(Long id, TransactionEntity transactionEntity) {
         try {
             Optional<TransactionEntity> transactionToUpdate = transactionRepository.findById(id);
             if (transactionToUpdate.isPresent()) {

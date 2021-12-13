@@ -4,6 +4,7 @@ import com.project.paymybuddy.DAO.User.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,11 +25,12 @@ public class TestController {
         return " Tu es connecté {}";
     }
 
-    @GetMapping("/api/login/logout/success")
+    @GetMapping("/api/logout/success")
     public String testLogOut(){
         UserEntity currentUser =  userService.getCurrentUser();
 
         log.info("L'user : {} est connecté ", currentUser.getEmail());
         return " tu es déconnecté";
     }
+
 }
