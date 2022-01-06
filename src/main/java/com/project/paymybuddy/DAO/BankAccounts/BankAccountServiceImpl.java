@@ -6,10 +6,10 @@ import com.project.paymybuddy.Domain.DTO.BankAccountRequest;
 import com.project.paymybuddy.Exception.BalanceInsufficientException;
 import com.project.paymybuddy.Exception.DataAlreadyExistException;
 import com.project.paymybuddy.Exception.DataNotFoundException;
-import com.project.paymybuddy.Exception.NotConformDataException;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

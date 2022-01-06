@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,8 +27,8 @@ public class UserServiceTest {
     private UserRepository userRepository;
     @Mock
     private RoleRepository roleRepository;
-    @MockBean
-    private PasswordEncoder passwordEncoder;
+    @Mock
+    private BCryptPasswordEncoder passwordEncoder;
     @InjectMocks
     UserServiceImpl userService;
 
@@ -45,7 +47,7 @@ public class UserServiceTest {
         role.setId(1L);
         role.setName("User_Role");
 
-        passwordEncoder = new PasswordEncoder();
+
 
         lenient().when(userRepository.save(user)).thenReturn(user);
     }

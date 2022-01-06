@@ -3,9 +3,10 @@ package com.project.paymybuddy.DAO.User;
 import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntity;
 import com.project.paymybuddy.DAO.BankAccounts.BankAccountService;
 import com.project.paymybuddy.Registration.token.ConfirmationTokenService;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;

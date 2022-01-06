@@ -25,13 +25,13 @@ import java.util.Optional;
 
 public class ContactController {
 
-    ContactServiceImpl contactService;
+    private ContactServiceImpl contactService;
 
 
 
 
     @GetMapping("/contacts")
-    public ResponseEntity<List<UserEntity>> displayedContactList(@RequestHeader ("Authorization") String token) throws Exception {
+    public ResponseEntity<List<UserEntity>> displayedContactList() throws Exception {
 
 
         List<UserEntity> contactList = contactService.findEveryContactBelongUser();

@@ -10,9 +10,10 @@ import com.project.paymybuddy.DAO.BankAccounts.BankAccountService;
 import com.project.paymybuddy.DAO.Transfers.TransferEntity;
 import com.project.paymybuddy.DAO.Transfers.TransferService;
 import com.project.paymybuddy.DAO.User.UserService;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

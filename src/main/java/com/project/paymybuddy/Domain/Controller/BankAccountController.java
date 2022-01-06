@@ -25,7 +25,6 @@ public class BankAccountController {
     public ResponseEntity<BankAccountEntity> linkUserToBankAccount(@RequestBody BankAccountRequest bankAccountRequest){
 
         BankAccountEntity bankAccountEntity = bankAccountService.LinkUserToBankAccount(bankAccountRequest);
-
         return ResponseEntity.ok(bankAccountEntity);
     }
 

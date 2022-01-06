@@ -1,7 +1,6 @@
 package com.project.paymybuddy.DAO.BankAccounts;
 
 import com.project.paymybuddy.Domain.DTO.BankAccountRequest;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 

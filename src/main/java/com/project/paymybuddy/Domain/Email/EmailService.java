@@ -10,7 +10,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @AllArgsConstructor
-@Service
+//@Service
 public class EmailService implements EmailSender{
 
     private final static Logger LOGGER = LoggerFactory.getLogger(EmailService.class);

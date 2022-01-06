@@ -18,8 +18,8 @@ import java.util.Optional;
 @RestController
 public class ExternalTransactionController {
 
-    private final ExternalTransactionService externalTransactionService;
-    private final TransactionService transactionService;
+    private ExternalTransactionService externalTransactionService;
+
 
 
     @PostMapping("api/user/transaction")
