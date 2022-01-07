@@ -162,7 +162,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     public UserEntity getCurrentUser() {
-
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         return userRepository.findByEmail(username);

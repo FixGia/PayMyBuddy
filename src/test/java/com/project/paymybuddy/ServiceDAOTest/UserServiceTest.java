@@ -8,9 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +27,7 @@ public class UserServiceTest {
 
     private UserEntity user = new UserEntity();
     private Role role = new Role();
+    private Authentication authentication;
 
     @Mock
     private UserRepository userRepository;
@@ -56,6 +59,11 @@ public class UserServiceTest {
 
 
         lenient().when(userRepository.save(user)).thenReturn(user);
+
+        authentication = Mockito.mock(Authentication.class);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.lenient().when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
     }
 
 
@@ -130,16 +138,16 @@ public class UserServiceTest {
 
     }
 
-    //TODO fix
     @Test
     public void getCurrentUserTest(){
-
+        lenient().when(authentication.getName()).thenReturn("JeanTest@gmail.com");
+        lenient().when(userRepository.findByEmail("JeanTest@gmail.com")).thenReturn(user);
+        assertEquals( "Test", userService.getCurrentUser().getLastname());
     }
 
     @Test
-    //TODO fix this
     public void loadUserByUsernameTest() {
-        userService.loadUserByUsername("JeanTest@gmail.com");
-
+        lenient().when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+        assertEquals("JeanTest@gmail.com", userService.loadUserByUsername(user.getEmail()).getUsername());
     }
 }

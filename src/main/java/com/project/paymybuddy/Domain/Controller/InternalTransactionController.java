@@ -28,7 +28,7 @@ private final UserService userService;
     public ResponseEntity<TransferEntity> CreditBankAccountTransaction(@RequestBody TransferRequest transferRequest){
 
 
-        TransferEntity newTransaction = internalTransactionService.makeWalletCreditToBankAccountTransfer(transferRequest);
+        TransferEntity newTransaction = internalTransactionService.DebitWalletToBankAccountTransfer(transferRequest);
 
         return new ResponseEntity<>(newTransaction, HttpStatus.OK);
     }
@@ -36,7 +36,7 @@ private final UserService userService;
     @PostMapping("api/user/transfer/debit")
     public ResponseEntity<TransferEntity> DebitBankAccountTransaction(@RequestBody TransferRequest transferRequest){
 
-        TransferEntity newTransaction = internalTransactionService.makeWalletDebitToBankAccountTransfer(transferRequest);
+        TransferEntity newTransaction = internalTransactionService.CreditWalletWithBankAccountTransfer(transferRequest);
 
         return new ResponseEntity<>(newTransaction, HttpStatus.OK);
     }

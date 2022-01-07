@@ -6,9 +6,9 @@ import com.project.paymybuddy.DAO.Transfers.TransferEntity;
 
 public interface InternalTransactionService {
 
-    TransferEntity makeWalletDebitToBankAccountTransfer(TransferRequest transferRequest);
+    TransferEntity DebitWalletToBankAccountTransfer(TransferRequest transferRequest);
 
-    TransferEntity makeWalletCreditToBankAccountTransfer(TransferRequest transferRequest);
+    TransferEntity CreditWalletWithBankAccountTransfer(TransferRequest transferRequest);
 
 
 }

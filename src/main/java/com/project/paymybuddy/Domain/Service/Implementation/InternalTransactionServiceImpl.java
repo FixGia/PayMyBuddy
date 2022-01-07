@@ -24,24 +24,24 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
 
     private static final double DESCRIPTION_LENGTH = 30;
 
-    BankAccountService bankAccountService;
-    UserService userService;
-    TransferService transferService;
-    MapDAO mapDAO;
+    private BankAccountService bankAccountService;
+    private UserService userService;
+    private TransferService transferService;
+    private MapDAO mapDAO;
 
     @Transactional
-    public TransferEntity makeWalletDebitToBankAccountTransfer(TransferRequest transferRequest) {
+    public TransferEntity DebitWalletToBankAccountTransfer(TransferRequest transferRequest) {
 
         UserEntity currentUsers = userService.getCurrentUser();
 
         try {
             prepareTransfer(transferRequest);
 
-            CalculateQualifyDebitTransfer(transferRequest);
+            CalculateQualifyDebitWalletTransfer(transferRequest);
 
-            updateBankAccountAndUserAfterDebitTransfer(transferRequest);
+            updateBankAccountAndUserAfterDebitWalletTransfer(transferRequest);
 
-            saveEffectiveTransfer(transferRequest);
+            mapEffectiveTransfer(transferRequest);
 
             userService.updateUsers(currentUsers);
 
@@ -71,7 +71,7 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
     }
 
     @Transactional
-    public TransferEntity makeWalletCreditToBankAccountTransfer(TransferRequest transferRequest) {
+    public TransferEntity CreditWalletWithBankAccountTransfer(TransferRequest transferRequest) {
 
         UserEntity currentUsers = userService.getCurrentUser();
 
@@ -79,11 +79,11 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
 
             prepareTransfer(transferRequest);
 
-            CalculateQualifyCreditTransfer(transferRequest);
+            CalculateQualifyCreditWalletTransfer(transferRequest);
 
-            updateBankAccountAndUserAfterCreditTransfer(transferRequest);
+            updateBankAccountAndUserAfterCreditWalletTransfer(transferRequest);
 
-            saveEffectiveTransfer(transferRequest);
+            mapEffectiveTransfer(transferRequest);
 
             userService.updateUsers(userService.getCurrentUser());
 
@@ -133,7 +133,7 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
         }
     }
 
-    public boolean CalculateQualifyDebitTransfer(@NotNull TransferRequest transferRequest) {
+    public boolean CalculateQualifyDebitWalletTransfer(@NotNull TransferRequest transferRequest) {
 
         UserEntity currentUser = userService.getCurrentUser();
         double wallet = currentUser.getWallet();
@@ -142,45 +142,46 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
             log.info("Wallet is sufficient to do Transfer");
             return true;
         }
-        log.info("Wallet is not sufficient to do Transfer");
+        log.error("Wallet is not sufficient to do Transfer");
         return false;
     }
 
-    public boolean CalculateQualifyCreditTransfer(@NotNull TransferRequest transferRequest) {
+    public boolean CalculateQualifyCreditWalletTransfer(@NotNull TransferRequest transferRequest) {
 
         UserEntity currentUser = userService.getCurrentUser();
-    double wallet = currentUser.getWallet();
-    double amount = transferRequest.getAmount();
-        if (wallet - amount >= 0) {
-            log.info("Wallet is sufficient to do Transfer");
+        BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUser.getEmail()).get();
+        double bankAccountAmount = userBankAccount.getAmount();
+        double amount = transferRequest.getAmount();
+        if (bankAccountAmount - amount >= 0) {
+            log.info("BankAccountAmount is sufficient to do Transfer");
             return true;
         }
-        log.info("Wallet is not sufficient to do Transfer");
+        log.error("BankAccountAmount is not sufficient to do Transfer");
         return false;
     }
 
-    public void updateBankAccountAndUserAfterDebitTransfer(@NotNull TransferRequest transferRequest) {
+    public void updateBankAccountAndUserAfterDebitWalletTransfer(@NotNull TransferRequest transferRequest) {
         UserEntity currentUser = userService.getCurrentUser();
+        BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUser.getEmail()).get();
         try {
+
         double newWalletUser = (currentUser.getWallet() - (transferRequest.getAmount()));
         currentUser.setWallet(newWalletUser);
 
-        BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUser.getEmail()).get();
-
-        double newAmountBankAccount = (userBankAccount.getAmount()) - (transferRequest.getAmount());
+        double newAmountBankAccount = (userBankAccount.getAmount())+(transferRequest.getAmount());
         userBankAccount.setAmount(newAmountBankAccount);
     } catch (ArithmeticException e) {
         e.printStackTrace();
     }
 }
 
-    public void updateBankAccountAndUserAfterCreditTransfer(@NotNull TransferRequest transferRequest) {
+    public void updateBankAccountAndUserAfterCreditWalletTransfer(@NotNull TransferRequest transferRequest) {
         UserEntity currentUser = userService.getCurrentUser();
         try {
-        double newWalletUser = (currentUser.getWallet() + ( transferRequest.getAmount()));
+        double newWalletUser = (currentUser.getWallet() + (transferRequest.getAmount()));
         currentUser.setWallet(newWalletUser);
             BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUser.getEmail()).get();
-        double newAmountBankAccount = (userBankAccount.getAmount() + (transferRequest.getAmount()));
+        double newAmountBankAccount = (userBankAccount.getAmount()-(transferRequest.getAmount()));
         userBankAccount.setAmount(newAmountBankAccount);
 }
     catch (ArithmeticException e) {
@@ -188,10 +189,10 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
     }
 }
 
-    public TransferEntity saveEffectiveTransfer(TransferRequest transferRequest) {
+    public TransferEntity mapEffectiveTransfer(TransferRequest transferRequest) {
 
     TransferEntity transfer = mapDAO.TransferEntityMapper(transferRequest);
-    transferService.saveTransfer(transfer);
+
     return transfer;
 }
 }
