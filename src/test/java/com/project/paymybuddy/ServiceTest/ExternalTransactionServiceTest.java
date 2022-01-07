@@ -2,16 +2,12 @@ package com.project.paymybuddy.ServiceTest;
 
 import com.project.paymybuddy.DAO.Transactions.TransactionEntity;
 import com.project.paymybuddy.DAO.Transactions.TransactionService;
-import com.project.paymybuddy.DAO.Transactions.TransactionServiceImpl;
-import com.project.paymybuddy.DAO.Transfers.TransferServiceImpl;
 import com.project.paymybuddy.DAO.User.UserEntity;
 import com.project.paymybuddy.DAO.User.UserService;
 import com.project.paymybuddy.Domain.DTO.TransactionDTO;
-import com.project.paymybuddy.Domain.Service.ExternalTransactionService;
 import com.project.paymybuddy.Domain.Service.Implementation.ExternalTransactionServiceImpl;
 import com.project.paymybuddy.Domain.Util.MapDAO;
 import com.project.paymybuddy.Exception.BalanceInsufficientException;
-import com.project.paymybuddy.Exception.DataNotFoundException;
 import com.project.paymybuddy.Exception.NotConformDataException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,12 +22,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class ExternalTransactionServiceTest {
 
-    private UserEntity currentUser = new UserEntity();
-    private UserEntity otherUser = new UserEntity();
-    private TransactionDTO transactionDTO = new TransactionDTO();
-    private TransactionEntity transactionEntity= new TransactionEntity();
-    private static final double DESCRIPTION_LENGTH = 30;
-    private static final double COMMISSION = 0.05;
+    private final UserEntity currentUser = new UserEntity();
+    private final UserEntity otherUser = new UserEntity();
+    private final TransactionDTO transactionDTO = new TransactionDTO();
+    private final TransactionEntity transactionEntity= new TransactionEntity();
 
     @Mock
     private UserService userService;
@@ -51,7 +45,6 @@ public class ExternalTransactionServiceTest {
         currentUser.setEmail("JeanTest@gmail.com");
         currentUser.setPassword("password");
         currentUser.setCivility("M");
-        currentUser.setWallet(5000);
         currentUser.setFirstname("Jean");
         currentUser.setLastname("Test");
         currentUser.setEnabled(true);
@@ -60,7 +53,6 @@ public class ExternalTransactionServiceTest {
         otherUser.setEmail("PetitTest@gmail.com");
         otherUser.setPassword("password");
         otherUser.setCivility("M");
-        otherUser.setWallet(2000);
         otherUser.setFirstname("Petit");
         otherUser.setLastname("Test");
         otherUser.setEnabled(true);
@@ -114,12 +106,34 @@ public class ExternalTransactionServiceTest {
     @Test
     public void CalculateQualifyTransactionTest(){
          externalTransactionService.CalculateQualifyTransaction(transactionDTO);
-        assertEquals(externalTransactionService.CalculateQualifyTransaction(transactionDTO), true);
+        assertTrue(externalTransactionService.CalculateQualifyTransaction(transactionDTO));
     }
     @Test
     public void CalculateQualifyTransactionButWalletIsNotSufficientTest(){
         transactionDTO.setAmount(10000000);
         assertThrows(BalanceInsufficientException.class, () ->externalTransactionService.CalculateQualifyTransaction(transactionDTO));
-
     }
+    @Test
+    public void updatePayerAndBeneficiaryWalletAfterTransactionTest(){
+        externalTransactionService.updatePayerAndBeneficiaryWalletAfterTransaction(transactionDTO);
+        assertEquals(currentUser.getWallet(),89.5);
+        assertEquals(otherUser.getWallet(), 110);
+    }
+
+    @Test
+    public void mapEffectiveTransactionTest(){
+        externalTransactionService.mapEffectiveTransaction(transactionDTO);
+        verify(mapDAO, times(1)).TransactionEntityMapper(transactionDTO);
+    }
+    @Test
+    public void displayedTransactionWhenUserIsPayerTest(){
+        externalTransactionService.displayedTransactionWhenUserIsPayer();
+        verify(transactionService, times(1)).findAllTransactionsByPayerEmail(userService.getCurrentUser().getEmail());
+    }
+    @Test
+    public void displayedTransactionWhenUserIsBeneficiaryTest(){
+        externalTransactionService.displayedTransactionWhenUserIsBeneficiary();
+        verify(transactionService, times(1)).findAllTransactionsByBeneficiaryEmail(userService.getCurrentUser().getEmail());
+    }
+
 }

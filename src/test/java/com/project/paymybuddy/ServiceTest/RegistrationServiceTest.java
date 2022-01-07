@@ -56,12 +56,6 @@ public class RegistrationServiceTest {
     }
     @Test
     public void registerTest(){
-        RegistrationRequest request = new RegistrationRequest("Jean", "Test", "M", "password", "JeanTest@gmail.com");
-        when(emailValidator.test("JeanTest@gmail.com")).thenReturn(true);
-        registrationService.register(request);
-        when(registrationService.signUpUser(new UserEntity())).thenReturn("token");
-
-
 
     }
 }

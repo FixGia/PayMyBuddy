@@ -70,7 +70,7 @@ public class ContactControllerTest {
     @Test
     @WithMockUser()
     public void addContactToContactListResponseExpected200() throws Exception{
-        mvc.perform(post("/api/user/contacts").param("email", "Test5g@gmail.com").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(post("/api/user/contact").param("email", "Test5g@gmail.com").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -82,13 +82,13 @@ public class ContactControllerTest {
     @Test
     @WithMockUser()
     public void deleteContactResponseExpected200() throws Exception{
-        mvc.perform(delete("/api/user/contacts").param("email", "Test5g@gmail.com").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(delete("/api/user/contact").param("email", "Test5g@gmail.com").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void deleteContactWithoutAuthorizationResponseExpected403() throws Exception{
-        mvc.perform(delete("/api/user/contacts").param("email", "Test5g@gmail.com").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(delete("/api/user/contact").param("email", "Test5g@gmail.com").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 }

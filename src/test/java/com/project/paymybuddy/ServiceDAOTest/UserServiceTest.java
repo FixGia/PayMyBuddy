@@ -10,6 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
@@ -20,8 +23,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
-    private UserEntity user;
-    private Role role;
+    private UserEntity user = new UserEntity();
+    private Role role = new Role();
 
     @Mock
     private UserRepository userRepository;
@@ -31,6 +34,8 @@ public class UserServiceTest {
     private BCryptPasswordEncoder passwordEncoder;
     @InjectMocks
     UserServiceImpl userService;
+    @Mock
+    UserDetailsService userDetailsService;
 
     @BeforeEach
     public void SetUp(){
@@ -42,6 +47,7 @@ public class UserServiceTest {
         user.setCivility("M");
         user.setId(1L);
         user.setWallet(50);
+        user.setPassword("password");
 
         role = new Role();
         role.setId(1L);
@@ -117,19 +123,23 @@ public class UserServiceTest {
         verify(userRepository, times(1)).findAll();
     }
 
+    @Test
+    public void saveUserTest(){
+        userService.saveUser(user);
+        verify(userRepository, times(1)).save(user);
+
+    }
 
     //TODO fix
     @Test
     public void getCurrentUserTest(){
 
     }
-    //TODO fix
-    @Test
-    public void saveUserTest(){
 
-    }
     @Test
     //TODO fix this
     public void loadUserByUsernameTest() {
+        userService.loadUserByUsername("JeanTest@gmail.com");
+
     }
 }
