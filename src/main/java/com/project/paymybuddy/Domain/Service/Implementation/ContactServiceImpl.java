@@ -107,36 +107,14 @@ public class ContactServiceImpl implements ContactService {
         UserEntity currentUser = userService.getCurrentUser();
 
         try {
-
             List<UserEntity> contactList = currentUser.getContactList();
             log.info("Find ContactList of user {}", currentUser.getEmail());
             return contactList;
         } catch (DataNotFoundException exception) {
             exception.printStackTrace();
-
+            log.error("Can't find contactList of user {}", currentUser.getEmail());
+            return Collections.emptyList();
         }
-        log.error("Can't find contactList of user {}", currentUser.getEmail());
-        return Collections.emptyList();
     }
 
-    public Optional<UserEntity> findAContactBelongUser (String email, Long id) {
-
-        //TODO Fix This !
-        try {
-            Optional<UserEntity> users = userRepository.findById(id);
-            List<UserEntity> contactList = users.get().getContactList();
-                for (UserEntity user : contactList) {
-                    Optional<UserEntity> contactToFind = Optional.ofNullable(userRepository.findByEmail(email));
-                    if (user == contactToFind.get()) {
-                        log.debug("Contact was found");
-                        return Optional.of(contactToFind.get());
-                    }
-                }
-
-        } catch (DataNotFoundException exception) {
-            exception.printStackTrace();
-        }
-        log.error("Can't find contact");
-        return Optional.empty();
-    }
 }

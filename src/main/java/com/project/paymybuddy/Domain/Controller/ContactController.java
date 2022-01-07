@@ -44,19 +44,19 @@ public class ContactController {
         return  new ResponseEntity<>(userEntity, HttpStatus.OK);
     }
 
-    @PostMapping("/contacts")
-    public ResponseEntity<List<UserEntity>> addContactToContactList(@RequestParam String email){
+    @PostMapping("/contact")
+    public ResponseEntity<List<UserEntity>> addContactToContactList(@RequestParam String email) {
 
         List<UserEntity> contactList = contactService.addContact(email);
 
         return new ResponseEntity<>(contactList, HttpStatus.OK);
     }
 
-    @DeleteMapping("/contacts")
+    @DeleteMapping("/contact")
     public ResponseEntity<List<UserEntity>> deleteContactInContactList(@RequestParam String email) {
 
         contactService.deleteContactInContactList(email);
-
         return ResponseEntity.ok(contactService.findEveryContactBelongUser());
+
     }
 }

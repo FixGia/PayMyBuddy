@@ -121,6 +121,7 @@ public class UserServiceTest {
     //TODO fix
     @Test
     public void getCurrentUserTest(){
+
     }
     //TODO fix
     @Test

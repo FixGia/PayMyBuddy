@@ -6,7 +6,6 @@ import com.project.paymybuddy.Domain.Util.MapDAO;
 import com.project.paymybuddy.Exception.BalanceInsufficientException;
 import com.project.paymybuddy.Exception.DataNotFoundException;
 import com.project.paymybuddy.Exception.NotConformDataException;
-import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntityRepository;
 import com.project.paymybuddy.DAO.Transactions.TransactionEntity;
 import com.project.paymybuddy.DAO.Transactions.TransactionService;
 import com.project.paymybuddy.DAO.User.UserService;
@@ -50,7 +49,7 @@ public class ExternalTransactionServiceImpl implements ExternalTransactionServic
 
                 updatePayerAndBeneficiaryWalletAfterTransaction(transactionDTO);
 
-                saveEffectiveTransaction(transactionDTO);
+                mapEffectiveTransaction(transactionDTO);
 
                 userService.updateUsers(payer);
 
@@ -96,10 +95,6 @@ public class ExternalTransactionServiceImpl implements ExternalTransactionServic
         if (transactionDTO.getAmount() <= 0) {
             throw new BalanceInsufficientException("amount must be a positive value");
         }
-        if (transactionDTO.getPayer() == null) {
-
-            throw new DataNotFoundException("payer not found in DB");
-        }
 
     }
 
@@ -137,10 +132,9 @@ public class ExternalTransactionServiceImpl implements ExternalTransactionServic
         }
     }
 
-    public TransactionEntity saveEffectiveTransaction(TransactionDTO transactionDTO) {
+    public TransactionEntity mapEffectiveTransaction(TransactionDTO transactionDTO) {
 
         TransactionEntity transaction = mapDAO.TransactionEntityMapper(transactionDTO);
-        transactionService.saveTransaction(transaction);
         return transaction;
     }
 
