@@ -1,4 +1,4 @@
-package com.project.paymybuddy.Registration;
+package com.project.paymybuddy.Domain.Util;
 
 import org.springframework.stereotype.Service;
 

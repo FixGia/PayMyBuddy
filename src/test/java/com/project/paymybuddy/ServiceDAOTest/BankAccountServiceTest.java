@@ -2,12 +2,10 @@ package com.project.paymybuddy.ServiceDAOTest;
 
 import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntity;
 import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntityRepository;
-import com.project.paymybuddy.DAO.BankAccounts.BankAccountService;
 import com.project.paymybuddy.DAO.BankAccounts.BankAccountServiceImpl;
 import com.project.paymybuddy.DAO.User.UserEntity;
 import com.project.paymybuddy.DAO.User.UserRepository;
-import com.project.paymybuddy.DAO.User.UserService;
-import com.project.paymybuddy.DAO.User.UserServiceImpl;
+import com.project.paymybuddy.Domain.Service.Implementation.UserServiceImpl;
 import com.project.paymybuddy.Domain.DTO.BankAccountRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,11 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

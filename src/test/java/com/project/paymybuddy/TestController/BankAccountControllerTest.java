@@ -2,10 +2,8 @@ package com.project.paymybuddy.TestController;
 
 import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntity;
 import com.project.paymybuddy.DAO.BankAccounts.BankAccountServiceImpl;
-import com.project.paymybuddy.DAO.Transactions.TransactionEntity;
 import com.project.paymybuddy.DAO.User.UserEntity;
-import com.project.paymybuddy.DAO.User.UserServiceImpl;
-import com.project.paymybuddy.Domain.DTO.TransactionDTO;
+import com.project.paymybuddy.Domain.Service.Implementation.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,7 +17,6 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

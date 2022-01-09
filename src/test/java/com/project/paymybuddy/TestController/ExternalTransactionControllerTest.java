@@ -1,7 +1,7 @@
 package com.project.paymybuddy.TestController;
 
 import com.project.paymybuddy.DAO.Transactions.TransactionEntity;
-import com.project.paymybuddy.Domain.DTO.TransactionDTO;
+import com.project.paymybuddy.Domain.DTO.TransactionRequest;
 import com.project.paymybuddy.Domain.Service.Implementation.ExternalTransactionServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class ExternalTransactionControllerTest {
     public void makeTransactionTest() throws Exception {
 
         TransactionEntity transactionEntity = new TransactionEntity();
-        lenient().when(externalTransactionService.makeTransaction(any(TransactionDTO.class))).thenReturn(Optional.of(transactionEntity));
+        lenient().when(externalTransactionService.makeTransaction(any(TransactionRequest.class))).thenReturn(Optional.of(transactionEntity));
         mvc.perform(post("/api/user/transaction").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"amount\":\"10000\",\"beneficiary\":\"homme1\",\"payer\":\"homme2\",\"description\":\"testé\"}"))
                 .andExpect(status().isOk());
@@ -43,7 +43,7 @@ public class ExternalTransactionControllerTest {
     public void makeTransactionWithoutAuthorizationTest() throws Exception {
 
         TransactionEntity transactionEntity = new TransactionEntity();
-        lenient().when(externalTransactionService.makeTransaction(any(TransactionDTO.class))).thenReturn(Optional.of(transactionEntity));
+        lenient().when(externalTransactionService.makeTransaction(any(TransactionRequest.class))).thenReturn(Optional.of(transactionEntity));
         mvc.perform(post("/api/user/transaction").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"amount\":\"10000\",\"beneficiary\":\"homme1\",\"payer\":\"homme2\",\"description\":\"testé\"}"))
                 .andExpect(status().isForbidden());

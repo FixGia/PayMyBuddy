@@ -1,8 +1,12 @@
-package com.project.paymybuddy.DAO.User;
+package com.project.paymybuddy.Domain.Service.Implementation;
 
-import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntity;
-import com.project.paymybuddy.DAO.BankAccounts.BankAccountService;
-import com.project.paymybuddy.Registration.token.ConfirmationTokenService;
+import com.project.paymybuddy.DAO.User.Role;
+import com.project.paymybuddy.DAO.User.RoleRepository;
+import com.project.paymybuddy.DAO.User.UserEntity;
+import com.project.paymybuddy.DAO.User.UserRepository;
+import com.project.paymybuddy.Domain.DTO.UserRequest;
+import com.project.paymybuddy.Domain.Service.UserService;
+import com.project.paymybuddy.Exception.NotConformDataException;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -98,6 +102,37 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return Optional.of(userEntity);
     }
 
+    //TODO Fix this "thing" !
+    public UserEntity updateProfile(UserRequest userRequest) {
+        UserEntity userToUpdate = getCurrentUser();
+        if (userToUpdate != null) {
+
+            String firstname = userRequest.getFirstname();
+            if (firstname != null) {
+                userToUpdate.setFirstname(firstname);
+            }
+            String lastname = userRequest.getLastname();
+            if (lastname != null) {
+                userToUpdate.setLastname(lastname);
+            }
+            String email = userRequest.getEmail();
+            if (email != null) {
+                userToUpdate.setEmail(email);
+            }
+            String civility = userRequest.getCivility();
+            if (civility != null) {
+                userToUpdate.setCivility(civility);
+            }
+            userRepository.save(userToUpdate);
+            log.info("update Users is a success");
+            return userToUpdate;
+        }
+        log.error("update Users is a fail");
+        return null;
+    }
+
+
+
     @Override
     public Optional<UserEntity> findUsersById(Long id) {
         return userRepository.findById(id);
@@ -114,7 +149,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
        userRepository.deleteByEmail(email);
     }
 
-     public Optional<UserEntity> updateUserWallet(Long id, UserEntity userEntity) {
+    public Optional<UserEntity> updateUserWallet(Long id, UserEntity userEntity) {
 
        Optional<UserEntity> userToUpdate = userRepository.findById(id);
        if (userToUpdate.isPresent()) {
@@ -144,12 +179,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void addRoleToUser(String username, String roleName) {
-        UserEntity user = userRepository.findByEmail(username);
-        Role role = roleRepository.findByName(roleName);
-        user.getRoles().add(role);
+        try {
+            UserEntity user = userRepository.findByEmail(username);
+            Role role = roleRepository.findByName(roleName);
+            user.getRoles().add(role);
+            userRepository.save(user);
+            log.info("success to add {} to {}", roleName, username);
 
+        } catch (IllegalStateException illegalStateException) {
+            log.error("fail to add{}, to {}", roleName, username);
+        }
     }
-
     @Override
     public UserEntity getUser(String email) {
         return userRepository.findByEmail(email);
@@ -159,7 +199,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public List<UserEntity> getUsers() {
         return userRepository.findAll();
     }
-
 
     public UserEntity getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

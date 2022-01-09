@@ -3,13 +3,12 @@ import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntity;
 import com.project.paymybuddy.DAO.User.UserEntity;
 import com.project.paymybuddy.Domain.DTO.TransferRequest;
 import com.project.paymybuddy.Domain.Service.InternalTransactionService;
-import com.project.paymybuddy.Domain.Util.MapDAO;
 import com.project.paymybuddy.Exception.BalanceInsufficientException;
 import com.project.paymybuddy.Exception.NotConformDataException;
 import com.project.paymybuddy.DAO.BankAccounts.BankAccountService;
 import com.project.paymybuddy.DAO.Transfers.TransferEntity;
 import com.project.paymybuddy.DAO.Transfers.TransferService;
-import com.project.paymybuddy.DAO.User.UserService;
+import com.project.paymybuddy.Domain.Service.UserService;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +26,7 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
     private BankAccountService bankAccountService;
     private UserService userService;
     private TransferService transferService;
-    private MapDAO mapDAO;
+
 
     @Transactional
     public TransferEntity DebitWalletToBankAccountTransfer(TransferRequest transferRequest) {
@@ -41,7 +40,6 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
 
             updateBankAccountAndUserAfterDebitWalletTransfer(transferRequest);
 
-            mapEffectiveTransfer(transferRequest);
 
             userService.updateUsers(currentUsers);
 
@@ -50,14 +48,12 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
             //**
             /* Set parameters for transfer entity
              */
-            TransferEntity transfer = mapDAO.TransferEntityMapper(transferRequest);
+            TransferEntity transfer = new TransferEntity();
             transfer.setDebit(transferRequest.getAmount());
             BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get();
             transfer.setBankAccount(userBankAccount);
             transfer.setUserEntity(currentUsers);
             transfer.setDescription(transferRequest.getDescription());
-
-
             transferService.saveTransfer(transfer);
 
             log.info("Transfer Debit Success");
@@ -83,8 +79,6 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
 
             updateBankAccountAndUserAfterCreditWalletTransfer(transferRequest);
 
-            mapEffectiveTransfer(transferRequest);
-
             userService.updateUsers(userService.getCurrentUser());
 
             bankAccountService.updateBankAccount(bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get());
@@ -92,7 +86,7 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
             //**
             /* Set parameters for transfer entity
              */
-            TransferEntity transfer = mapDAO.TransferEntityMapper(transferRequest);
+            TransferEntity transfer = new TransferEntity();
             transfer.setCredit(transferRequest.getAmount());
             BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get();
             transfer.setBankAccount(userBankAccount);
@@ -189,12 +183,6 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
     }
 }
 
-    public TransferEntity mapEffectiveTransfer(TransferRequest transferRequest) {
-
-    TransferEntity transfer = mapDAO.TransferEntityMapper(transferRequest);
-
-    return transfer;
-}
 }
 
 

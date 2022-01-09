@@ -2,10 +2,9 @@ package com.project.paymybuddy.Domain.Service.Implementation;
 
 import com.project.paymybuddy.Domain.Service.ContactService;
 import com.project.paymybuddy.Exception.DataNotFoundException;
-import com.project.paymybuddy.Registration.UserDTO;
 import com.project.paymybuddy.DAO.User.UserEntity;
 import com.project.paymybuddy.DAO.User.UserRepository;
-import com.project.paymybuddy.DAO.User.UserService;
+import com.project.paymybuddy.Domain.Service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -79,24 +78,25 @@ public class ContactServiceImpl implements ContactService {
     public void deleteContactInContactList(String email) {
 
         UserEntity currentUser = userService.getCurrentUser();
-        List<UserEntity> contactList = currentUser.getContactList();
-        UserEntity userToDelete = userService.getUser(email);
 
-        if (userToDelete != null) {
-            if (contactList.contains(userToDelete))
-                    try {
-                        contactList.remove(userToDelete);
-                        userService.saveUser(currentUser);
-                        log.info(" Contact has been deleted");
-                    } catch (DataNotFoundException exception) {
-                        log.error("Cant delete contact because he doesn't exist in DB");
-                        exception.printStackTrace();
-                    }
-                } else log.error(" userToDelete not found");
+        try {
+            List<UserEntity> contactList = currentUser.getContactList();
+            UserEntity userToDelete = userService.getUser(email);
+
+            if (contactList.contains(userToDelete) || userToDelete != null) {
+                contactList.remove(userToDelete);
+                userService.saveUser(currentUser);
+                log.info(" Contact has been deleted");
             }
+            log.error(" Contact doesnt Exist in contactList");
+        } catch (DataNotFoundException exception) {
+            log.error("Cant delete contact because contactList doesnt exist");
+            exception.printStackTrace();
+        }
+    }
 
 
-    /**
+        /**
      * Users findAllContact
      * used to find All User's Contact
      *

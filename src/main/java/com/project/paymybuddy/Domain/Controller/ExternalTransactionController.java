@@ -1,8 +1,6 @@
 package com.project.paymybuddy.Domain.Controller;
 
-import com.project.paymybuddy.DAO.Transactions.TransactionService;
-import com.project.paymybuddy.DAO.User.UserService;
-import com.project.paymybuddy.Domain.DTO.TransactionDTO;
+import com.project.paymybuddy.Domain.DTO.TransactionRequest;
 import com.project.paymybuddy.Domain.Service.ExternalTransactionService;
 import com.project.paymybuddy.DAO.Transactions.TransactionEntity;
 import lombok.AllArgsConstructor;
@@ -23,10 +21,10 @@ public class ExternalTransactionController {
 
 
     @PostMapping("api/user/transaction")
-    public ResponseEntity<TransactionEntity> makeTransaction(@RequestBody TransactionDTO transactionDTO){
+    public ResponseEntity<TransactionEntity> makeTransaction(@RequestBody TransactionRequest transactionRequest){
 
 
-        Optional<TransactionEntity> newTransaction = externalTransactionService.makeTransaction(transactionDTO);
+        Optional<TransactionEntity> newTransaction = externalTransactionService.makeTransaction(transactionRequest);
 
         return new ResponseEntity<>(newTransaction.get(), HttpStatus.OK);
     }

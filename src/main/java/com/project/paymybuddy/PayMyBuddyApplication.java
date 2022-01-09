@@ -1,7 +1,5 @@
 package com.project.paymybuddy;
 
-import com.project.paymybuddy.DAO.User.Role;
-import com.project.paymybuddy.DAO.User.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

@@ -3,7 +3,7 @@ package com.project.paymybuddy.Domain.Controller;
 import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntity;
 import com.project.paymybuddy.DAO.BankAccounts.BankAccountService;
 import com.project.paymybuddy.DAO.User.UserEntity;
-import com.project.paymybuddy.DAO.User.UserService;
+import com.project.paymybuddy.Domain.Service.UserService;
 import com.project.paymybuddy.Domain.DTO.BankAccountRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

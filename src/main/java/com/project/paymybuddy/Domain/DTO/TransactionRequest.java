@@ -1,9 +1,11 @@
 package com.project.paymybuddy.Domain.DTO;
 
-import lombok.Data;
+import lombok.*;
+
 
 @Data
 public class TransactionRequest {
+
 
     private double amount;
     private String beneficiary;

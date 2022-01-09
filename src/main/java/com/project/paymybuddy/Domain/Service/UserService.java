@@ -1,4 +1,8 @@
-package com.project.paymybuddy.DAO.User;
+package com.project.paymybuddy.Domain.Service;
+
+import com.project.paymybuddy.DAO.User.Role;
+import com.project.paymybuddy.DAO.User.UserEntity;
+import com.project.paymybuddy.Domain.DTO.UserRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,7 +10,7 @@ import java.util.Optional;
 public interface UserService {
 
 
-    Optional<UserEntity> updateUsers(UserEntity userEntity);
+    Optional<UserEntity> updateUsers(UserEntity user);
 
     Optional<UserEntity> findUsersById(Long id);
 
@@ -26,4 +30,5 @@ public interface UserService {
 
     List<UserEntity> getUsers();
 
+    UserEntity updateProfile(UserRequest userRequest);
 }

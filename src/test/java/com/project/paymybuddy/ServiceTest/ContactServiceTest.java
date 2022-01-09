@@ -2,21 +2,18 @@ package com.project.paymybuddy.ServiceTest;
 
 import com.project.paymybuddy.DAO.User.UserEntity;
 import com.project.paymybuddy.DAO.User.UserRepository;
-import com.project.paymybuddy.DAO.User.UserService;
+import com.project.paymybuddy.Domain.Service.UserService;
 import com.project.paymybuddy.Domain.Service.Implementation.ContactServiceImpl;
 import com.project.paymybuddy.Exception.DataNotFoundException;
-import com.sun.xml.bind.v2.TODO;
-import io.swagger.annotations.Info;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -96,13 +93,11 @@ public class ContactServiceTest {
         assertTrue(contactList.isEmpty());
     }
 
-    // TODO fixme test return value?
-
     @Test
     public void TestFindEveryContactBelongUser(){
         user.setContactList(contactList);
         contactList.add(addUser);
         contactService.findEveryContactBelongUser();
-
     }
+
 }

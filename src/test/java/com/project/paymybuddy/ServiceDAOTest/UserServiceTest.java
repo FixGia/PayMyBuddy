@@ -1,8 +1,7 @@
 package com.project.paymybuddy.ServiceDAOTest;
 
 import com.project.paymybuddy.DAO.User.*;
-import com.project.paymybuddy.Security.PasswordEncoder;
-import com.sun.xml.bind.v2.TODO;
+import com.project.paymybuddy.Domain.Service.Implementation.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,16 +9,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -116,8 +116,8 @@ public class UserServiceTest {
         userService.addRoleToUser(user.getEmail(), role.getName());
         verify(userRepository,times(1)).findByEmail(user.getEmail());
         verify(roleRepository,times(1)).findByName(role.getName());
-
     }
+
     @Test
     public void getUserTest(){
         lenient().when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
@@ -149,5 +149,9 @@ public class UserServiceTest {
     public void loadUserByUsernameTest() {
         lenient().when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
         assertEquals("JeanTest@gmail.com", userService.loadUserByUsername(user.getEmail()).getUsername());
+    }
+    @Test
+    public void loadUserByUserNameButUserNotFound(){
+        assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("JeanJean"));
     }
 }

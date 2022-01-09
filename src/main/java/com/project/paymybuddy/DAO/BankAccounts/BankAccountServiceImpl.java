@@ -1,7 +1,7 @@
 package com.project.paymybuddy.DAO.BankAccounts;
 
 import com.project.paymybuddy.DAO.User.UserEntity;
-import com.project.paymybuddy.DAO.User.UserService;
+import com.project.paymybuddy.Domain.Service.UserService;
 import com.project.paymybuddy.Domain.DTO.BankAccountRequest;
 import com.project.paymybuddy.Exception.BalanceInsufficientException;
 import com.project.paymybuddy.Exception.DataAlreadyExistException;

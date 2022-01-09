@@ -3,7 +3,7 @@ package com.project.paymybuddy.Domain.Controller;
 import com.project.paymybuddy.DAO.Transfers.TransferEntity;
 import com.project.paymybuddy.DAO.Transfers.TransferService;
 import com.project.paymybuddy.DAO.User.UserEntity;
-import com.project.paymybuddy.DAO.User.UserService;
+import com.project.paymybuddy.Domain.Service.UserService;
 import com.project.paymybuddy.Domain.DTO.TransferRequest;
 import com.project.paymybuddy.Domain.Service.InternalTransactionService;
 import lombok.AllArgsConstructor;

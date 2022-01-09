@@ -5,10 +5,9 @@ import com.project.paymybuddy.DAO.BankAccounts.BankAccountService;
 import com.project.paymybuddy.DAO.Transfers.TransferEntity;
 import com.project.paymybuddy.DAO.Transfers.TransferService;
 import com.project.paymybuddy.DAO.User.UserEntity;
-import com.project.paymybuddy.DAO.User.UserService;
+import com.project.paymybuddy.Domain.Service.UserService;
 import com.project.paymybuddy.Domain.DTO.TransferRequest;
 import com.project.paymybuddy.Domain.Service.Implementation.InternalTransactionServiceImpl;
-import com.project.paymybuddy.Domain.Util.MapDAO;
 import com.project.paymybuddy.Exception.BalanceInsufficientException;
 import com.project.paymybuddy.Exception.NotConformDataException;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,8 +29,6 @@ public class InternalTransactionServiceTest {
     private final TransferRequest transferRequest = new TransferRequest();
     private final TransferEntity transfer = new TransferEntity();
 
-    @Mock
-    private MapDAO mapDAO;
     @Mock
     UserService userService;
     @Mock
@@ -73,7 +70,7 @@ public class InternalTransactionServiceTest {
 
     @Test
     public void DebitWalletToBankAccountTransferTest(){
-        lenient().when(mapDAO.TransferEntityMapper(transferRequest)).thenReturn(transfer);
+
         internalTransactionService.DebitWalletToBankAccountTransfer(transferRequest);
         assertEquals(1100,bankAccount.getAmount());
         assertEquals(0, currentUser.getWallet());
@@ -81,7 +78,7 @@ public class InternalTransactionServiceTest {
     }
     @Test
     public void makeWalletCreditToBankAccountTransferTest(){
-        lenient().when(mapDAO.TransferEntityMapper(transferRequest)).thenReturn(transfer);
+
         internalTransactionService.CreditWalletWithBankAccountTransfer(transferRequest);
         assertEquals(900, bankAccount.getAmount());
         assertEquals(200, currentUser.getWallet());
@@ -138,11 +135,5 @@ public class InternalTransactionServiceTest {
         assertEquals(900, bankAccount.getAmount());
         assertEquals(200, currentUser.getWallet());
     }
-    @Test
-    public void saveEffectiveTransferTest(){
-        internalTransactionService.mapEffectiveTransfer(transferRequest);
-        verify(mapDAO, times(1)).TransferEntityMapper(transferRequest);
-    }
-
 
 }
