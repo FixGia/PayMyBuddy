@@ -1,5 +1,6 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -15,7 +16,7 @@
     
 
     <!-- Bootstrap core CSS -->
-<link href="/templates/signin.css" rel="stylesheet">
+<link href="/static/css/signin.css" rel="stylesheet">
 
     <style>
       .bd-placeholder-img {
@@ -35,7 +36,7 @@
 
     
     <!-- Custom styles for this template -->
-    <link href="signin.css" rel="stylesheet">
+    <link href="../static/css/signin.css" rel="stylesheet">
   </head>
   <body class="text-center">
 
@@ -46,7 +47,7 @@
 
     <div class="form-floating">
       <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-      <label for="floatingInput">Email address </label>
+      <label for="floatingInput"> Email address </label>
     </div>
     <div class="form-floating">
       <input type="password" class="form-control" id="floatingPassword" placeholder="Password" >

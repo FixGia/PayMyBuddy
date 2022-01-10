@@ -1,23 +1,23 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="FixGia">
-    <meta name="generator" content="FixGia">
     <title>HomePage on PayMyBuddy in Bootstrap 5.1</title>
-    <link rel="stylesheet" href="My.css"/>
+
+    <!--<link rel="stylesheet" href="../static/My.css"/> -->
+    <link rel="stylesheet" th:href="@{/static/css/My.css}"/>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
           rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <!-- Bootstrap core CSS -->
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-            rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    
     <!-- Custom styles for this template -->
-    <link href="form-validation.css" rel="stylesheet">
+
+    <link href="../static/css/form-validation.css" rel="stylesheet">
+
   </head>
 
   <body class="bg-light">
@@ -25,17 +25,21 @@
 <div class="container">
 
   <main>
-      <form th:action="@{/api/registration}" th:object="@{RegistrationRequest}" method="POST">
+
     <div class="py-5 text-center">
-      <img class="d-block mx-auto mb-4" src="/templates/Img/logoPmB.png" alt="" width="auto" height="auto">
+      <img class="d-block mx-auto mb-4" src="/templates/Img/logoPmB.png" alt="" width="218" height="67">
       <h2>Welcome in PayMyBuddy Application</h2>
       <p class="lead"> Let's go to check out !  </p>
     </div>
 
+      <form th:action="@{/api/registration}"
+            method="POST">
+
       <div class="col-12">
 
-          <label for="Civility" class="form-label" >Civility</label>
-          <input type="text" class="form-control" id="Civility" placeholder="Mister or Miss" required>
+
+          <label for="civility" class="form-label">Civility
+          <input type="text" class="form-control" id="civility" name="civility" placeholder="Mister or Miss" required > </label>
           <div class="invalid-feedback">
               Please enter your civility
           </div>
@@ -44,18 +48,20 @@
 
       <div class="col-12">
           <label for="firstName" class="form-label">Firstname</label>
-              <input type="text" class="form-control" id="firstName" placeholder="Jean" value="" required>
+              <input type="text" class="form-control" id="firstName" name ="firstname" placeholder="Jean" required>
               <div class="invalid-feedback">
                 Valid first name is required.
               </div>
               </div>
+
             <div class="col-12">
-              <label for="lastName" class="form-label">Last name</label>
-              <input type="text" class="form-control" id="lastName" placeholder="Smith" value="" required>
+              <label for="lastName" class="form-label">Lastname</label>
+              <input type="text" class="form-control" id="lastName"  placeholder="Smith" value="" required>
               <div class="invalid-feedback">
                 Valid last name is required.
               </div>
             </div>
+
           <div class="col-12">
               <label for= "password" class="form-label"> Password </label>
               <div class="input-group has-validation">
@@ -77,9 +83,8 @@
 
                 </div>
               </div>
+
             </div>
-
-
 
 
 
@@ -103,7 +108,6 @@
   </footer>
 </div>
 
-<script src="/static/form-validation.js"></script> <script src="form-validation.js"></script>
 
   </body>
 
