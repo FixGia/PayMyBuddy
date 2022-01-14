@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 
 @Controller
 @AllArgsConstructor
@@ -43,17 +42,18 @@ public class ProfileController {
         return "/UpdateProfile";
     }
     @PostMapping(value = {"/Profile/update"} )
-    public String UpdateProfile(@ModelAttribute UserRequest userRequest) {
+    public String UpdateProfile(@ModelAttribute UserRequest userRequest, Model model) {
 
         try {
             UserEntity user = userService.updateProfile(userRequest);
             ResponseEntity.ok(user);
+            GetProfile(model);
             log.info(" Request to update {} profile is a success", userRequest.getFirstname()+" "+userRequest.getLastname());
-            return "/Home";
+            return "/Profile";
         } catch (NotConformDataException exception) {
             exception.printStackTrace();
             log.error(" Request to update {} profile failed", userService.getCurrentUser());
-            return "/Error";
+            return "/error";
         }
     }
 }

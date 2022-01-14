@@ -4,17 +4,22 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
+
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/static/css/signing.css">
+  <link rel="stylesheet" type="test/css" th:href="@{/css/signing.css}">
+  <title> Login</title>
+
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <link th:href="@{//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css}">
+  <link th:href="@{/maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css}">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" href="/static/signing.css">
-<link rel="stylesheet" th:href="@{/static/signing.css}">
 </head>
   <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="background-color: whitesmoke">
     <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-      <img src="/static/Img/logoPmB.png">
+      <img src="/Img/logoPmB.png">
       <svg class="bi me-2" width="80" height="64" role="img" aria-label="Bootstrap"><use xlink:href="#PayMyBuddy"/></svg> </img>
     </a>
 
@@ -22,7 +27,7 @@
       <li sec:authorize="isAuthenticated()" ><a href="#" th:href="@{/Home}" class="nav-link px-2 link-secondary">Home</a></li>
       <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Contacts}" class="nav-link px-2 link-dark">Contacts</a></li>
       <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Profile}"class="nav-link px-2 link-dark">Profile</a></li>
-      <li sec:authorize="isAuthenticated()"><a href="#"th:href="@{/Transactions}" class="nav-link px-2 link-dark">Transactions</a></li>
+      <li sec:authorize="isAuthenticated()"><a href="#"th:href="@{/Transaction}" class="nav-link px-2 link-dark">Transactions</a></li>
     </ul>
 
     <div class="col-md-3 text-end">
@@ -43,6 +48,7 @@
         <div id="login-box" class="col-md-12">
           <form th:action="@{/login}" method="post" id="login-form" class="form">
             <h3 class="text-center text-info">Login</h3>
+            <h4 class="text-center text-info">PayMyBuddy</h4>
             <div class="form-group">
               <label for="email" class="text-info">Email:</label><br>
               <input type="text" name="email" id="email" class="form-control" value="" required>
@@ -61,10 +67,9 @@
             <div class="form-group">
               <label for="remember-me" class="text-info"><span>Remember me</span> <span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br>
               <input type="submit" name="submit" class="btn btn-info btn-md" value="Login">
+              <a href="#"  sec:authorize="isAnonymous()" th:href="@{/checkout}" style="margin-left:325px" class="text-info">Register here</a>
             </div>
-            <div id="register-link" class="text-right">
-              <a href="#" th:href="@{/checkout}" class="text-info">Register here</a>
-            </div>
+
           </form>
         </div>
       </div>

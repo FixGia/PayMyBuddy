@@ -1,13 +1,27 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
-    <title>FormBankAccount</title>
-</head>
-<body>
-<h4 class="mb-3">Add BankAccount</h4>
+    <title>Make Transaction</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/checkout.css" >
+    <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link th:href="@{//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css}">
+    <!------ Include the above in your HEAD tag ---------->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+</head>
+
+<body>
+</br></br></br></br></br></br></br></br>
+<h4 class="mb-3 text-center text-info">Make Transaction</h4>
+</br>
+<div class="main-login main-center text-center text-info">
 <form th:action="@{/makeTransaction}" method="post" >
     <div class="form-group">
         <label for="Amount" class="cols-sm-2 control-label">Your Amount</label>
@@ -33,7 +47,11 @@
         <div class="cols-sm-10">
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                <input type="text" class="form-control" name="beneficiary" id="beneficiary"  placeholder="Beneficiary" th:value="${userEntity.getContactList().get(0).getEmail()}" required/>
+                <select class="form-control" name="beneficiary" id="beneficiary" placeholder="Choose your Contact" value="" required>
+                    <option   th:each="contact : ${contactList}"  th:utext="${contact.email}">  </option>
+
+
+                </select>
             </div>
         </div>
     </div>
@@ -42,13 +60,23 @@
         <div class="cols-sm-10">
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                <input type="text" class="form-control" name="payer" id="payer"  placeholder="Enter your description" th:value="${userEntity.email}" required/>
+                <input type="text" class="form-control" name="payer" id="payer" readonly th:value="${currentUser.email}" required/>
             </div>
         </div>
     </div>
     <div class="form-group ">
-        <input type="submit" name="register" class="btn btn-info btn-md" value="update">
+        <input type="submit" name="register" class="btn btn-info btn-md" value="UPDATE" onclick="return confirm(' are you sur to make this trans')">
     </div>
 </form>
+</div>
 </body>
+</br></br>
+<footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy;2021 PayMyBuddy Company </p>
+    <ul class="list-inline">
+        <li class="list-inline-item"><a href="#">Privacy</a></li>
+        <li class="list-inline-item"><a href="#">Terms</a></li>
+        <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+</footer>
 </html>

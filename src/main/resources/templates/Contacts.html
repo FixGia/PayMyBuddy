@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <title>List groups · Bootstrap v5.1</title>
+  <title>Contacts</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
         rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -28,7 +28,7 @@
       <li sec:authorize="isAuthenticated()" ><a href="#" th:href="@{/Home}" class="nav-link px-2 link-secondary">Home</a></li>
       <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Contacts}" class="nav-link px-2 link-dark">Contacts</a></li>
       <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Profile}"class="nav-link px-2 link-dark">Profile</a></li>
-      <li sec:authorize="isAuthenticated()"><a href="#"th:href="@{/Transactions}" class="nav-link px-2 link-dark">Transactions</a></li>
+      <li sec:authorize="isAuthenticated()"><a href="#"th:href="@{/Transaction}" class="nav-link px-2 link-dark">Transactions</a></li>
     </ul>
 
     <div class="col-md-3 text-end">
@@ -38,14 +38,6 @@
       </form>
     </div>
   </header>
-  <div class="b-example-divider" style=" margin-bottom: 50px;"></div>
-  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="justify-content: center">
-    <option selected>Open this select menu</option>
-    <option value="1">Add Contact</option>
-    <option value="2">Delete Contact</option>
-    <option value="3">Show All Contacts</option>
-  </select>
-</div>
 </div>
 
 

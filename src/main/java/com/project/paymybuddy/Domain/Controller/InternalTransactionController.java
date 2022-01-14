@@ -23,30 +23,5 @@ private final TransferService transferService;
 private final UserService userService;
 
 
-    @GetMapping(value = {"/transfer/debit"})
-    public String DisplayDebitFormTransfer(){
-        return "DebitYourWallet";
-    }
-
-    @GetMapping(value = {"/transfer/credit"})
-    public String DisplayCreditFormTransfer(){
-        return "CreditYourWallet";
-    }
-
-    @PostMapping("/transfer/debit")
-    public String CreditBankAccountTransaction(@ModelAttribute TransferRequest transferRequest){
-
-        TransferEntity newTransaction = internalTransactionService.DebitWalletToBankAccountTransfer(transferRequest);
-        new ResponseEntity<>(newTransaction, HttpStatus.OK);
-        return "/Profile";
-    }
-
-    @PostMapping("/transfer/credit")
-    public ResponseEntity<TransferEntity> DebitBankAccountTransaction(@ModelAttribute TransferRequest transferRequest){
-
-        TransferEntity newTransaction = internalTransactionService.CreditWalletWithBankAccountTransfer(transferRequest);
-
-        return new ResponseEntity<>(newTransaction, HttpStatus.OK);
-    }
 
 }

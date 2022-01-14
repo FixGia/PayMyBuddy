@@ -1,36 +1,28 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html"
-      xmlns:th="http://www.thymeleaf.org">
-
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+    <meta charset="UTF-8">
+    <title> Registration</title>
+
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/checkout.css" >
+    <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link th:href="@{//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css}">
+    <!------ Include the above in your HEAD tag ---------->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
-    <!-- Website CSS style -->
-    <link rel="stylesheet" href="/static/checkout.css" >
-
-    <!-- Website Font style -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/static/checkout.css">
-    <!-- Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
-
-    <title>Admin</title>
 </head>
+
+</br></br>
 <body>
 
-<div class="container">
-    <div class="row main">
-        <div class="main-login main-center">
-
-
-            <h5>Sign up once and watch any of our free demos.</h5>
+        <h3 class="text-info text-center"> Register on PayMyBuddy !</h3>
+        </br></br>
+        <div class="main-login main-center text-center text-info">
 
             <form th:action="@{/checkout}" method="post" >
 
@@ -93,12 +85,14 @@
 
 
         </div>
-    </div>
-</div>
-
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="js/bootstrap.min.js"></script>
 </body>
+
+<footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy;2021 PayMyBuddy Company </p>
+    <ul class="list-inline">
+        <li class="list-inline-item"><a href="#">Privacy</a></li>
+        <li class="list-inline-item"><a href="#">Terms</a></li>
+        <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+</footer>
 </html>

@@ -27,24 +27,7 @@ public class ExternalTransactionController {
 
 
 
-    @PostMapping("/makeTransaction")
-    public String makeTransaction(@ModelAttribute TransactionRequest transactionRequest) {
 
-        try {
-            Optional<TransactionEntity> newTransaction = externalTransactionService.makeTransaction(transactionRequest);
-            new ResponseEntity<>(newTransaction.get(), HttpStatus.OK);
-            return "/transactions";
-        } catch (NotConformDataException exception) {
-            log.error("Can't make this transaction");
-            return "FormTransaction";
-        }
-    }
-
-    @GetMapping( value= { "/FormTransaction"})
-    public String Transaction(Model model){
-        model.addAttribute(userService.getCurrentUser());
-        return "FormTransaction";
-    }
 
 
 }

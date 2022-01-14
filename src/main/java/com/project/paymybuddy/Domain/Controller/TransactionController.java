@@ -5,16 +5,26 @@ import com.project.paymybuddy.DAO.Transactions.TransactionService;
 import com.project.paymybuddy.DAO.Transfers.TransferEntity;
 import com.project.paymybuddy.DAO.Transfers.TransferService;
 import com.project.paymybuddy.DAO.User.UserEntity;
+import com.project.paymybuddy.Domain.DTO.TransactionRequest;
+import com.project.paymybuddy.Domain.DTO.TransferRequest;
+import com.project.paymybuddy.Domain.Service.ExternalTransactionService;
+import com.project.paymybuddy.Domain.Service.InternalTransactionService;
 import com.project.paymybuddy.Domain.Service.UserService;
 import com.project.paymybuddy.Exception.DataNotFoundException;
+import com.project.paymybuddy.Exception.NotConformDataException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -24,6 +34,8 @@ public class TransactionController {
     private UserService userService;
     private TransferService transferService;
     private TransactionService transactionService;
+    private InternalTransactionService internalTransactionService;
+    private ExternalTransactionService externalTransactionService;
 
 
     @GetMapping(value = {"/Transaction"})
@@ -51,17 +63,68 @@ public class TransactionController {
     }
 
         @GetMapping( value = {"/deleteTransaction"})
-        public String deleteTransaction(@RequestParam Long id) {
+        public String deleteTransaction(@RequestParam Long id, Model model) {
 
         transactionService.deleteTransaction(transactionService.findTransactionById(id));
+        displayTransferAndTransaction(model);
             return "/transactions";
 
         }
 
         @GetMapping (value = {"/deleteTransfer"})
-    public String deleteTransfer(@RequestParam Long id){
+    public String deleteTransfer(@RequestParam Long id, Model model){
         transferService.deleteTransfer(id);
+        displayTransferAndTransaction(model);
         return "/transactions";
         }
+    @GetMapping(value = {"/transfer/debit"})
+    public String DisplayDebitFormTransfer(){
+        return "DebitYourWallet";
     }
+
+    @GetMapping(value = {"/transfer/credit"})
+    public String DisplayCreditFormTransfer(){
+        return "CreditYourWallet";
+    }
+
+    @PostMapping("/transfer/debit")
+    public String CreditBankAccountTransaction(@ModelAttribute TransferRequest transferRequest, Model model){
+
+        TransferEntity newTransaction = internalTransactionService.DebitWalletToBankAccountTransfer(transferRequest);
+        new ResponseEntity<>(newTransaction, HttpStatus.OK);
+        displayTransferAndTransaction(model);
+        return "/transactions";
+    }
+
+    @PostMapping("/transfer/credit")
+    public String DebitBankAccountTransaction(@ModelAttribute TransferRequest transferRequest, Model model){
+
+        TransferEntity newTransaction = internalTransactionService.CreditWalletWithBankAccountTransfer(transferRequest);
+        displayTransferAndTransaction(model);
+        new ResponseEntity<>(newTransaction, HttpStatus.OK);
+        return "/transactions";
+    }
+
+    @PostMapping("/makeTransaction")
+    public String makeTransaction(@ModelAttribute TransactionRequest transactionRequest, Model model) {
+
+        try {
+            Optional<TransactionEntity> newTransaction = externalTransactionService.makeTransaction(transactionRequest);
+            new ResponseEntity<>(newTransaction.get(), HttpStatus.OK);
+            displayTransferAndTransaction(model);
+            return "/transactions";
+        } catch (NotConformDataException exception) {
+            log.error("Can't make this transaction");
+            return "FormTransaction";
+        }
+    }
+
+    @GetMapping( value= { "/FormTransaction"})
+    public String Transaction(Model model){
+        model.addAttribute("currentUser", userService.getCurrentUser());
+        model.addAttribute("contactList", userService.getCurrentUser().getContactList());
+        displayTransferAndTransaction(model);
+        return "/FormTransaction";
+    }
+}
 
