@@ -43,6 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     }
 
+
     @Override
     public List<TransactionEntity> findAllTransactionsByPayerEmail(String email) {
         try {
@@ -57,19 +58,26 @@ public class TransactionServiceImpl implements TransactionService {
 
     }
 
-
-
-
+    public void deleteTransaction(TransactionEntity transactionEntity) {
+        try {
+            transactionRepository.delete(transactionEntity);
+            log.info(" Transaction was deleted");
+        } catch (DataNotFoundException exception) {
+            exception.printStackTrace();
+            log.error(" Delete Transaction Fail");
+        }
+    }
     @Override
-    public Optional<TransactionEntity> findTransactionById(Long id) {
+    public TransactionEntity findTransactionById(Long id) {
         try {
             log.info("transaction with id :" + id + " was found");
-            return transactionRepository.findById(id);
+            Optional<TransactionEntity> transactionEntity = transactionRepository.findById(id);
+            return transactionEntity.get();
         } catch (DataNotFoundException dataNotFoundException) {
             dataNotFoundException.printStackTrace();
+            log.error(" Data was not found");
+            return null;
         }
-        log.error(" Data was not found");
-        return Optional.empty();
     }
 
 

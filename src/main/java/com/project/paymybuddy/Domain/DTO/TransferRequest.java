@@ -10,5 +10,4 @@ public class TransferRequest {
     private double amount;
     private String description;
 
-
 }

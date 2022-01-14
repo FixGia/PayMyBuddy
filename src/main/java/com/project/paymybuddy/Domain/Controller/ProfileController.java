@@ -4,40 +4,57 @@ import com.project.paymybuddy.DAO.User.UserEntity;
 import com.project.paymybuddy.Domain.DTO.UserRequest;
 import com.project.paymybuddy.Domain.Service.UserService;
 import com.project.paymybuddy.Exception.DataNotFoundException;
+import com.project.paymybuddy.Exception.NotConformDataException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+import java.util.Collection;
+
+@Controller
 @AllArgsConstructor
 @Slf4j
 public class ProfileController {
 
     private UserService userService;
 
-    @GetMapping("api/user/profile/display")
-    public ResponseEntity<UserEntity> GetProfile() {
-
+    @GetMapping(value = {"/Profile"} )
+    public String GetProfile(Model model) {
         try {
+
             UserEntity currentUser = userService.getCurrentUser();
-            log.info("Profile found");
-            return ResponseEntity.ok(currentUser);
+            model.addAttribute(currentUser);
+            log.info("Profile found{} ", currentUser.getEmail());
+            ResponseEntity.ok(currentUser);
+            return "Profile";
 
         } catch (DataNotFoundException exception) {
             exception.printStackTrace();
             log.error("Profile Not Found");
-            return (ResponseEntity<UserEntity>) ResponseEntity.notFound();
+            return "/Error";
         }
     }
 
-    @PostMapping("api/user/profile/update")
-    public ResponseEntity<UserEntity> UpdateProfile(@RequestBody UserRequest userRequest) {
-
-        UserEntity user = userService.updateProfile(userRequest);
-        return ResponseEntity.ok(user);
+    @GetMapping(value = {"/UpdateProfile"})
+    public String updateProfile(){
+        return "/UpdateProfile";
     }
+    @PostMapping(value = {"/Profile/update"} )
+    public String UpdateProfile(@ModelAttribute UserRequest userRequest) {
 
+        try {
+            UserEntity user = userService.updateProfile(userRequest);
+            ResponseEntity.ok(user);
+            log.info(" Request to update {} profile is a success", userRequest.getFirstname()+" "+userRequest.getLastname());
+            return "/Home";
+        } catch (NotConformDataException exception) {
+            exception.printStackTrace();
+            log.error(" Request to update {} profile failed", userService.getCurrentUser());
+            return "/Error";
+        }
+    }
 }
 

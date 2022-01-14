@@ -16,7 +16,7 @@ public interface UserService {
 
     void deleteUserByEmail(String email);
 
-    Optional<UserEntity> updateUserWallet(Long id, UserEntity userEntity);
+    UserEntity updateUserWallet(UserEntity userEntity);
 
     UserEntity saveUser(UserEntity user);
 

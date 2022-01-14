@@ -1,11 +1,15 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>List groups · Bootstrap v5.1</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
           rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <!-- Bootstrap core CSS -->
 
@@ -18,21 +22,22 @@
 <div class="container">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="background-color: whitesmoke">
         <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-            <img src="/templates/Img/logoPmB.png">
+            <img src="/static/Img/logoPmB.png">
             <svg class="bi me-2" width="80" height="64" role="img" aria-label="Bootstrap"><use xlink:href="#PayMyBuddy"/></svg> </img>
         </a>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="#" class="nav-link px-2 link-secondary">Home</a></li>
-            <li><a href="#" class="nav-link px-2 link-dark">Contacts</a></li>
-            <li><a href="#" class="nav-link px-2 link-dark">Profile</a></li>
-            <li><a href="#" class="nav-link px-2 link-dark">Transactions</a></li>
+            <li sec:authorize="isAuthenticated()" ><a href="#" th:href="@{/Home}" class="nav-link px-2 link-secondary">Home</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Contacts}" class="nav-link px-2 link-dark">Contacts</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Profile}"class="nav-link px-2 link-dark">Profile</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="#"th:href="@{/Transactions}" class="nav-link px-2 link-dark">Transactions</a></li>
         </ul>
 
         <div class="col-md-3 text-end">
-            <button type="button" class="btn btn-outline-primary me-2" style="background-color: skyblue;">Login</button>
-            <button type="button" class="btn btn-primary">Logout</button>
-            <button type="button" class="btn btn-primary">Sign-up</button>
+            <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">
+                <button sec:authorize="isAuthenticated()" class="btn btn-outline-danger my-2 my-sm-0 btn-sm" type="submit">Logout</button>
+                <button sec:authorize="isAnonymous()" th:href="@{/login}" class="btn btn-outline-info my-2 my-sm-0 btn-sm" type="submit">Login</button>
+            </form>
         </div>
     </header>
 
@@ -57,7 +62,7 @@
             </div>
             <h2>Transaction</h2>
             <p>Make a transaction. Pay one of yours contacts</p>
-            <a href="#" class="icon-link">
+            <a href="#" class="icon-link" th:href="@{/Transaction}">
                 Go to transaction page
                 <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
             </a>
@@ -68,7 +73,7 @@
             </div>
             <h2>Profil</h2>
             <p>Check your profil , update it or add some informations </p>
-            <a href="#" class="icon-link">
+            <a href="#" class="icon-link" th:href="@{/Profile}">
                 Go to Profil page
                 <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
             </a>
@@ -80,7 +85,7 @@
             <h2>Contact </h2>
             <p> Check your contact, add a new friend or delete bad one. Payback or not.
                 </br>Make your choice.</p>
-            <a href="#" class="icon-link">
+            <a href="#" class="icon-link"th:href="@{/Contacts}">
                Go to Contact page
                 <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
             </a>

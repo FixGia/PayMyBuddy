@@ -7,10 +7,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserRequest {
 
-    private String Civility;
     private String firstname;
     private String lastname;
     private String email;
-    private String password;
+    private Double Wallet;
+
 
 }

@@ -31,6 +31,4 @@ public class BankAccountEntity {
     private String iban;
 
 
-    public BankAccountEntity(double amount, UserEntity currentUser, String iban) {
-    }
 }

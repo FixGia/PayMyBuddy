@@ -21,7 +21,7 @@ public class TestController {
 
        UserEntity currentUser =  userService.getCurrentUser();
        log.info("L'user : {} est connecté ", currentUser.getEmail());
-        return " Tu es connecté {}";
+        return " Tu es connecté {}" + currentUser.getEmail();
     }
 
     @GetMapping("/api/logout/success")

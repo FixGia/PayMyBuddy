@@ -31,88 +31,85 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
     @Transactional
     public TransferEntity DebitWalletToBankAccountTransfer(TransferRequest transferRequest) {
 
-        UserEntity currentUsers = userService.getCurrentUser();
+        try {  UserEntity currentUsers = userService.getCurrentUser();
 
-        try {
-            prepareTransfer(transferRequest);
+            if (currentUsers != null ) {
 
-            CalculateQualifyDebitWalletTransfer(transferRequest);
+                prepareTransfer(transferRequest);
+                CalculateQualifyDebitWalletTransfer(transferRequest);
+                updateBankAccountAndUserAfterDebitWalletTransfer(transferRequest);
 
-            updateBankAccountAndUserAfterDebitWalletTransfer(transferRequest);
+                userService.updateUsers(currentUsers);
+                bankAccountService.updateBankAccount(bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get());
 
+                //**
+                /* Set parameters for transfer entity
+                 */
+                TransferEntity transfer = new TransferEntity();
+                transfer.setDebit(transferRequest.getAmount());
+                BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get();
+                transfer.setBankAccount(userBankAccount);
+                transfer.setUserEntity(currentUsers);
+                transfer.setDescription(transferRequest.getDescription());
+                transferService.saveTransfer(transfer);
 
-            userService.updateUsers(currentUsers);
-
-            bankAccountService.updateBankAccount(bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get());
-
-            //**
-            /* Set parameters for transfer entity
-             */
-            TransferEntity transfer = new TransferEntity();
-            transfer.setDebit(transferRequest.getAmount());
-            BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get();
-            transfer.setBankAccount(userBankAccount);
-            transfer.setUserEntity(currentUsers);
-            transfer.setDescription(transferRequest.getDescription());
-            transferService.saveTransfer(transfer);
-
-            log.info("Transfer Debit Success");
-            return transfer;
-        } catch (NotConformDataException e) {
-            e.printStackTrace();
-
+                log.info("Transfer Debit Success");
+                return transfer;
+            }
+            } catch (NotConformDataException e) {
+                e.printStackTrace();
+                log.error("Transfer Credit fail");
+                return null;
+            }
+            throw new NotConformDataException(" CurrentUser doesn't exist");
         }
-        log.error("Transfer Debit fail");
-        return null;
-    }
 
     @Transactional
     public TransferEntity CreditWalletWithBankAccountTransfer(TransferRequest transferRequest) {
 
-        UserEntity currentUsers = userService.getCurrentUser();
 
         try {
+            UserEntity currentUsers = userService.getCurrentUser();
 
-            prepareTransfer(transferRequest);
+            if (currentUsers != null) {
 
-            CalculateQualifyCreditWalletTransfer(transferRequest);
+                prepareTransfer(transferRequest);
 
-            updateBankAccountAndUserAfterCreditWalletTransfer(transferRequest);
+                CalculateQualifyCreditWalletTransfer(transferRequest);
 
-            userService.updateUsers(userService.getCurrentUser());
+                updateBankAccountAndUserAfterCreditWalletTransfer(transferRequest);
 
-            bankAccountService.updateBankAccount(bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get());
+                userService.updateUsers(userService.getCurrentUser());
 
-            //**
-            /* Set parameters for transfer entity
-             */
-            TransferEntity transfer = new TransferEntity();
-            transfer.setCredit(transferRequest.getAmount());
-            BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get();
-            transfer.setBankAccount(userBankAccount);
-            transfer.setUserEntity(currentUsers);
-            transfer.setDescription(transferRequest.getDescription());
+                bankAccountService.updateBankAccount(bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get());
 
-            //**
-            /* Save transfer entity
-             */
-            transferService.saveTransfer(transfer);
 
-            log.info("Transfer Credit Success");
-            return transfer;
+                TransferEntity transfer = new TransferEntity();
+                transfer.setCredit(transferRequest.getAmount());
+                BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get();
+                transfer.setBankAccount(userBankAccount);
+                transfer.setUserEntity(currentUsers);
+                transfer.setDescription(transferRequest.getDescription());
 
+                transferService.saveTransfer(transfer);
+                log.info("Transfer Credit Success");
+                return transfer;
+            }
         } catch (NotConformDataException e) {
             e.printStackTrace();
-
+            log.error("Transfer Credit fail");
+            return null;
         }
-        log.error("Transfer Credit fail");
-        return null;
+        throw new NotConformDataException(" CurrentUser doesn't exist");
     }
+
+
 
 
     public void prepareTransfer(@NotNull TransferRequest transferRequest) {
 
        UserEntity currentUser = userService.getCurrentUser();
+
        if(currentUser == null) {
             throw new NotConformDataException("Owner cannot be null");
         }
@@ -127,6 +124,7 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
         }
     }
 
+
     public boolean CalculateQualifyDebitWalletTransfer(@NotNull TransferRequest transferRequest) {
 
         UserEntity currentUser = userService.getCurrentUser();
@@ -137,7 +135,7 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
             return true;
         }
         log.error("Wallet is not sufficient to do Transfer");
-        return false;
+        throw new BalanceInsufficientException("Wallet is not sufficient to do Transfer");
     }
 
     public boolean CalculateQualifyCreditWalletTransfer(@NotNull TransferRequest transferRequest) {
@@ -151,12 +149,15 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
             return true;
         }
         log.error("BankAccountAmount is not sufficient to do Transfer");
-        return false;
+        throw new BalanceInsufficientException("BankAccount is not sufficient to do Transfer");
     }
 
+
     public void updateBankAccountAndUserAfterDebitWalletTransfer(@NotNull TransferRequest transferRequest) {
+
         UserEntity currentUser = userService.getCurrentUser();
         BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUser.getEmail()).get();
+
         try {
 
         double newWalletUser = (currentUser.getWallet() - (transferRequest.getAmount()));
@@ -164,10 +165,13 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
 
         double newAmountBankAccount = (userBankAccount.getAmount())+(transferRequest.getAmount());
         userBankAccount.setAmount(newAmountBankAccount);
-    } catch (ArithmeticException e) {
+        userService.updateUserWallet(currentUser);
+
+        } catch (ArithmeticException e) {
         e.printStackTrace();
     }
 }
+
 
     public void updateBankAccountAndUserAfterCreditWalletTransfer(@NotNull TransferRequest transferRequest) {
         UserEntity currentUser = userService.getCurrentUser();
@@ -177,6 +181,7 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
             BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUser.getEmail()).get();
         double newAmountBankAccount = (userBankAccount.getAmount()-(transferRequest.getAmount()));
         userBankAccount.setAmount(newAmountBankAccount);
+        userService.updateUserWallet(currentUser);
 }
     catch (ArithmeticException e) {
         e.printStackTrace();

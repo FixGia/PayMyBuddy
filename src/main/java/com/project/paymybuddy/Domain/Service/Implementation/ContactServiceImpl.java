@@ -29,21 +29,20 @@ public class ContactServiceImpl implements ContactService {
      */
     public List<UserEntity> addContact(String email) {
 
-        UserEntity currentUser = userService.getCurrentUser();
+
 
         try {
+            UserEntity currentUser = userService.getCurrentUser();
             List<UserEntity> contactList = currentUser.getContactList();
             UserEntity contactToAdd = userService.getUser(email);
-            if (contactToAdd != null) {
+            if (contactToAdd != null && !contactList.contains(contactToAdd)) {
                 contactList.add(contactToAdd);
-                userRepository.save(currentUser);
+                userService.updateUsers(userService.getCurrentUser());
                 log.info("add a new contact in ContactList");
                 return contactList;
             }
-
         } catch (DataNotFoundException exception) {
-
-            log.error("ContactList of {} not found", currentUser);
+            log.error("ContactList of {} not found", userService.getCurrentUser());
             exception.printStackTrace();
         }
         log.error("Can't add a new contact in ContactList");
@@ -77,18 +76,18 @@ public class ContactServiceImpl implements ContactService {
      */
     public void deleteContactInContactList(String email) {
 
-        UserEntity currentUser = userService.getCurrentUser();
+
 
         try {
+            UserEntity currentUser = userService.getCurrentUser();
             List<UserEntity> contactList = currentUser.getContactList();
             UserEntity userToDelete = userService.getUser(email);
 
-            if (contactList.contains(userToDelete) || userToDelete != null) {
+            if (contactList.contains(userToDelete) && userToDelete != null) {
                 contactList.remove(userToDelete);
-                userService.saveUser(currentUser);
                 log.info(" Contact has been deleted");
+                userService.updateUsers(userService.getCurrentUser());
             }
-            log.error(" Contact doesnt Exist in contactList");
         } catch (DataNotFoundException exception) {
             log.error("Cant delete contact because contactList doesnt exist");
             exception.printStackTrace();

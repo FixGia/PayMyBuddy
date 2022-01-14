@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>PayMyBuddy Profile Page</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+    <!-- Bootstrap core CSS -->
+
+
+
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/list-groups.css" rel="stylesheet">
+</head>
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="background-color: whitesmoke">
+        <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            <img src="/static/Img/logoPmB.png">
+            <svg class="bi me-2" width="80" height="64" role="img" aria-label="Bootstrap"><use xlink:href="#PayMyBuddy"/></svg> </img>
+        </a>
+
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li sec:authorize="isAuthenticated()" ><a href="#" th:href="@{/Home}" class="nav-link px-2 link-secondary">Home</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Contacts}" class="nav-link px-2 link-dark">Contacts</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Profile}"class="nav-link px-2 link-dark">Profile</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="#"th:href="@{/Transactions}" class="nav-link px-2 link-dark">Transactions</a></li>
+        </ul>
+
+        <div class="col-md-3 text-end">
+            <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">
+                <button sec:authorize="isAuthenticated()" class="btn btn-outline-danger my-2 my-sm-0 btn-sm" type="submit">Logout</button>
+                <button sec:authorize="isAnonymous()" th:href="@{/login}" class="btn btn-outline-info my-2 my-sm-0 btn-sm" type="submit">Login</button>
+            </form>
+        </div>
+    </header>
+
+<body>
+
+<!------ Include the above in your HEAD tag ---------->
+<div>
+    </br></br>
+    <p style="color: #DC7633; font-size: 1.4em; font-weight: bold;" th:text="'Profile: '+${userEntity.firstname}+' '+ ${userEntity.lastname}"></p>
+    <hr size="20" width="96%" color="black">
+    </br>
+</div>
+
+<div>
+    <form method="post" action="@{/profile}">
+
+        <fieldset>
+            </br>			</br>			</br>			</br>
+            <div class="form-group">
+                <label for="firstName">Firstname</label>
+                <input type="text"   readonly="readonly"  class="form-control" id="firstName" name="userName" th:value="${userEntity.firstname}" size="20" maxlength="20" />
+            </div>
+            <div class="form-group">
+                <label for="lastName">Lastname</label>
+                <input type="text"  readonly="readonly"  class="form-control" id="lastName" name="lastName" th:value="${userEntity.lastname}" size="20" maxlength="20" />
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+
+                <input type="text"  readonly="readonly" class="form-control" id="email" name="email" th:value="${userEntity.email}" size="20" maxlength="60" />
+            </div>
+            <div class="form-group">
+                <label for="wallet">Wallet <span class="requis"></span></label>
+
+                <input type="text"  readonly="readonly" class="form-control" id="wallet" name="wallet" th:value="${userEntity.wallet}" size="20" maxlength="60" />
+            </div>
+
+            </br></br></br></br>
+            <link sec:authorize="isAuthenticated()"><a href="#" th:href="@{/transfer/credit}" class="nav-link px-2 link-secondary">Credit your Wallet</a></link>
+            <link sec:authorize="isAuthenticated()"><a href="#" th:href="@{/transfer/debit}" class="nav-link px-2 link-secondary">Debit your Wallet</a></link>
+            <link sec:authorize="isAuthenticated()"><a href="#" th:href="@{/UpdateProfile}" class="nav-link px-2 link-secondary">Update</a></link>
+            <link sec:authorize="isAuthenticated()"><a href="#" th:href="@{/BankAccount}" class="nav-link px-2 link-secondary">Add BankAccount</a></link>
+        </fieldset>
+    </form>
+</div>
+
+
+
+</body>
+<footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy;2021 PayMyBuddy Company </p>
+    <ul class="list-inline">
+        <li class="list-inline-item"><a href="#">Privacy</a></li>
+        <li class="list-inline-item"><a href="#">Terms</a></li>
+        <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+</footer>
+</div>
+
+</html>

@@ -99,8 +99,8 @@ public class UserServiceTest {
     }
     @Test
     public void updateUserWalletTest(){
-        lenient().when(userRepository.findById(user.getId())).thenReturn(Optional.ofNullable(user));
-        userService.updateUserWallet(user.getId(), user);
+        lenient().when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+        userService.updateUserWallet(user);
         verify(userRepository, times(1)).save(user);
 
     }

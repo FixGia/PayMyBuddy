@@ -50,8 +50,8 @@ public class RegistrationServiceTest {
         user.setId(1L);
         user.setWallet(50);
         request.setCivility("M");
-        request.setFirstName("Jean");
-        request.setLastName("Test");
+        request.setFirstname("Jean");
+        request.setLastname("Test");
         request.setPassword("password");
         request.setEmail("JeanTest@gmail.com");
 

@@ -8,28 +8,30 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-//@RequestMapping
 @AllArgsConstructor
 @Slf4j
 public class RegistrationController {
 
     private RegistrationService registrationService;
 
-    @GetMapping( value = "/checkout")
+    @GetMapping( value = {"/checkout" } )
     public String displaySignUpPerform(){
-        return "checkout";
+        return "/checkout";
     }
 
-    @PostMapping(value = {"api/registration"})
-    public String register(@RequestBody RegistrationRequest request) {
+
+    @PostMapping( value = {"/checkout"} )
+    public String register(@ModelAttribute RegistrationRequest request) {
 
         try {
+            registrationService.register(request);
             log.info("registration is valid");
-            return registrationService.register(request);
+            return "/Index";
+
         } catch (Exception exception) {
             exception.printStackTrace();
             log.error("registration fail");
-            return null;
+            return "/Error";
         }
 
     }

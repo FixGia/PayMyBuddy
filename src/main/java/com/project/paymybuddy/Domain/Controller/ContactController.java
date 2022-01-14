@@ -1,54 +1,61 @@
 package com.project.paymybuddy.Domain.Controller;
 
+import com.project.paymybuddy.Domain.Service.ContactService;
 import com.project.paymybuddy.Domain.Service.Implementation.ContactServiceImpl;
 import com.project.paymybuddy.DAO.User.UserEntity;
+import com.project.paymybuddy.Domain.Service.UserService;
+import com.project.paymybuddy.Exception.DataNotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.dom4j.rule.Mode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-@RestController
+@Controller
 @AllArgsConstructor
-@RequestMapping("/api/user")
-
+@Slf4j
 public class ContactController {
 
-    private ContactServiceImpl contactService;
+    private ContactService contactService;
+    private UserService userService;
 
 
+    @GetMapping(value = {"/Contacts"} )
+    public String displayedContactList(Model model) {
 
-
-    @GetMapping("/contacts")
-    public ResponseEntity<List<UserEntity>> displayedContactList() throws Exception {
-
-
-        List<UserEntity> contactList = contactService.findEveryContactBelongUser();
-            return new ResponseEntity<>(contactList, HttpStatus.OK);
+        try {
+            List<UserEntity> contactList = contactService.findEveryContactBelongUser();
+            model.addAttribute("contacts", contactList);
+            List<UserEntity> everyUsers = userService.getUsers();
+            model.addAttribute("notContacts", everyUsers);
+            log.info(" display {}", contactList);
+            new ResponseEntity<>(contactList, HttpStatus.OK);
+            return "/Contacts";
+        } catch (DataNotFoundException dataNotFoundException) {
+            log.error(" can't display contacts");
+            return "/Error";
+        }
     }
 
-    @GetMapping("/contact")
-    public ResponseEntity<Optional<UserEntity>> displayedContact(@RequestParam String email){
-        Optional<UserEntity> userEntity = contactService.findAContactBelongUser(email);
-        return  new ResponseEntity<>(userEntity, HttpStatus.OK);
-    }
 
-    @PostMapping("/contact")
-    public ResponseEntity<List<UserEntity>> addContactToContactList(@RequestParam String email) {
+    @GetMapping("/addContact")
+    public String addContactToContactList(@RequestParam String email) {
 
         List<UserEntity> contactList = contactService.addContact(email);
-
-        return new ResponseEntity<>(contactList, HttpStatus.OK);
+        new ResponseEntity<>(contactList, HttpStatus.OK);
+        return"Contacts";
     }
 
-    @DeleteMapping("/contact")
-    public ResponseEntity<List<UserEntity>> deleteContactInContactList(@RequestParam String email) {
-
+    @GetMapping("/deleteContact")
+    public String deleteContactInContactList(@RequestParam String email) {
         contactService.deleteContactInContactList(email);
-        return ResponseEntity.ok(contactService.findEveryContactBelongUser());
+        return "/Contacts";
 
     }
 }

@@ -35,8 +35,8 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new IllegalStateException("email not valid");
         }
         String token = signUpUser(new UserEntity(
-                request.getFirstName(),
-                request.getLastName(),
+                request.getFirstname(),
+                request.getLastname(),
                 request.getEmail(),
                 request.getCivility(),
                 request.getPassword()));

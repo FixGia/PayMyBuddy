@@ -93,6 +93,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             if (civility != null) {
                 currentUserEntity.setCivility(civility);
             }
+            List<UserEntity> contactList = userEntity.getContactList();
+            if(contactList != null) {
+                currentUserEntity.setContactList(contactList);
+            }
+
 
             userRepository.save(currentUserEntity);
             log.info("update Users is a success");
@@ -119,10 +124,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             if (email != null) {
                 userToUpdate.setEmail(email);
             }
-            String civility = userRequest.getCivility();
-            if (civility != null) {
-                userToUpdate.setCivility(civility);
-            }
+
             userRepository.save(userToUpdate);
             log.info("update Users is a success");
             return userToUpdate;
@@ -149,12 +151,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
        userRepository.deleteByEmail(email);
     }
 
-    public Optional<UserEntity> updateUserWallet(Long id, UserEntity userEntity) {
+    public UserEntity updateUserWallet(UserEntity userEntity) {
 
-       Optional<UserEntity> userToUpdate = userRepository.findById(id);
-       if (userToUpdate.isPresent()) {
-           userToUpdate.get().setWallet(userEntity.getWallet());
-           userRepository.save(userToUpdate.get());
+       UserEntity userToUpdate = userRepository.findByEmail(userEntity.getEmail());
+       if (userToUpdate != null ) {
+           userToUpdate.setWallet(userEntity.getWallet());
+           userRepository.save(userToUpdate);
            return userToUpdate;
        }
         log.error("user Not found, wallet can't update");

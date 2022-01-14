@@ -16,5 +16,7 @@ public interface TransactionService {
 
     Iterable<TransactionEntity> findAllTransactions(Long id);
 
-    Optional<TransactionEntity> findTransactionById(Long id);
+    TransactionEntity findTransactionById(Long id);
+
+    void deleteTransaction(TransactionEntity transactionEntity);
 }

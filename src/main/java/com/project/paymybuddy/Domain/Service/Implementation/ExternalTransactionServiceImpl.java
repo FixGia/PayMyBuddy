@@ -105,7 +105,7 @@ public class ExternalTransactionServiceImpl implements ExternalTransactionServic
             log.info("Wallet is sufficient to do Transaction");
             return true;
         }
-        log.info("Wallet is not sufficient to do Transaction");
+        log.error("Wallet is not sufficient to do Transaction");
         throw new BalanceInsufficientException("Wallet is not sufficient to do Transaction");
     }
 
@@ -118,11 +118,12 @@ public class ExternalTransactionServiceImpl implements ExternalTransactionServic
             double newWalletPayer = (payer.getWallet() - (transactionRequest.getAmount() + (transactionRequest.getAmount() * COMMISSION)));
 
             payer.setWallet(newWalletPayer);
+            userService.updateUserWallet(payer);
 
             double newWalletBeneficiary = (beneficiary.getWallet() + (transactionRequest.getAmount()));
 
             beneficiary.setWallet(newWalletBeneficiary);
-
+            userService.updateUserWallet(beneficiary);
         } catch (ArithmeticException e) {
 
             e.printStackTrace();

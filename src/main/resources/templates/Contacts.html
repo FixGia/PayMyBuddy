@@ -1,5 +1,7 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <title>List groups · Bootstrap v5.1</title>
 
@@ -18,24 +20,24 @@
 <div class="container">
   <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="background-color: whitesmoke">
     <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-      <img src="/templates/Img/logoPmB.png">
+      <img src="/static/Img/logoPmB.png">
       <svg class="bi me-2" width="80" height="64" role="img" aria-label="Bootstrap"><use xlink:href="#PayMyBuddy"/></svg> </img>
     </a>
 
     <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <li><a href="#" class="nav-link px-2 link-secondary">Home</a></li>
-      <li><a href="#" class="nav-link px-2 link-dark">Contacts</a></li>
-      <li><a href="#" class="nav-link px-2 link-dark">Profile</a></li>
-      <li><a href="#" class="nav-link px-2 link-dark">Transactions</a></li>
+      <li sec:authorize="isAuthenticated()" ><a href="#" th:href="@{/Home}" class="nav-link px-2 link-secondary">Home</a></li>
+      <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Contacts}" class="nav-link px-2 link-dark">Contacts</a></li>
+      <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Profile}"class="nav-link px-2 link-dark">Profile</a></li>
+      <li sec:authorize="isAuthenticated()"><a href="#"th:href="@{/Transactions}" class="nav-link px-2 link-dark">Transactions</a></li>
     </ul>
 
     <div class="col-md-3 text-end">
-      <button type="button" class="btn btn-outline-primary me-2">Login</button>
-      <button type="button" class="btn btn-primary">Logout</button>
-      <button type="button" class="btn btn-primary">Sign-up</button>
+      <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">
+        <button sec:authorize="isAuthenticated()" class="btn btn-outline-danger my-2 my-sm-0 btn-sm" type="submit">Logout</button>
+        <button sec:authorize="isAnonymous()" th:href="@{/login}" class="btn btn-outline-info my-2 my-sm-0 btn-sm" type="submit">Login</button>
+      </form>
     </div>
   </header>
-
   <div class="b-example-divider" style=" margin-bottom: 50px;"></div>
   <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="justify-content: center">
     <option selected>Open this select menu</option>
@@ -44,55 +46,69 @@
     <option value="3">Show All Contacts</option>
   </select>
 </div>
+</div>
+
+
 <body>
 
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous">
+<section class="container mt-4 mb-4">
 
 
-<div class="container marketing">
 
-  <!-- Three columns of text below the carousel -->
-  <div class="row">
-    <div class="col-lg-4">
-      <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
-
-      <h2>Profile</h2>
-      <p>Some representative placeholder content for the three columns of text below the carousel. This is the first column.</p>
-      <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-    </div><!-- /.col-lg-4 -->
-    <div class="col-lg-4">
-      <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
-      <h2>Profile</h2>
-      <p>Some representative placeholder content for the three columns of text below the carousel. This is the first column.</p>
-      <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-    </div><!-- /.col-lg-4 -->
-    <div class="col-lg-4">
-      <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
-
-      <h2>Profile</h2>
-      <p>Another exciting bit of representative placeholder content. This time, we've moved on to the second column.</p>
-      <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-    </div><!-- /.col-lg-4 -->
-    <div class="col-lg-4">
-      <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
-      <h2>Profile</h2>
-      <p>Another exciting bit of representative placeholder content. This time, we've moved on to the second column.</p>
-      <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-    </div><!-- /.col-lg-4 -->
-    <div class="col-lg-4">
-      <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
-      <h2>Profile</h2>
-      <p>Another exciting bit of representative placeholder content. This time, we've moved on to the second column.</p>
-      <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+  <div class="container" th:each=" contact : ${contacts}">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <div class="d-flex flex-row border rounded">
+          <div class="p-0 w-25">
+            <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
+          </div>
+          <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
+            <h4 class="text-primary"th:utext="${contact.firstname}"> </h4>
+            <h5 class="text-info" th:utext="${contact.lastname}"> </h5>
+            <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
+              <li><i class="text-primary" th:utext="${contact.email}"></i></li>
+            </ul>
+            <p class="text-right m-0"> <a class="btn btn-danger" onclick="return confirm( 'Do you really want to delete this contact?')"
+                                          th:href="@{/deleteContact(email=${contact.email})}">Delete</a></p>
+            <p class="text-right m-0"> <a class="btn btn-success" th:href="@{/FormTransaction}">Make Transaction </a></p>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- /.col-lg-4 -->
-    <div class="col-lg-4">
-      <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
-      <h2>Profile</h2>
-      <p>And lastly this, the third column of representative placeholder content.</p>
-      <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-    </div><!-- /.col-lg-4 -->
-  </div><!-- /.row -->
-</div>
+  </div>
+
+  </form>
+
+  <div class="consTrans3">
+  <table class="table">
+    <thead>
+    <tr class="panel-th" >
+      <th width="30%"  style="font-style:italic; font-size:14px; color:#707070; ">Email</th>
+      <th width="50%" style="font-style:italic; font-size:14px; color:#707070; ">LastName</th>
+      <th width="20%" style="font-style:italic; font-size:14px; color:#707070; ">FirstName</th>
+      <th ></th>
+    </thead>
+    </tr>
+    <tbody>
+    <tr th:each ="notContact : ${ notContacts}">
+      <td th:utext="${notContact.email}">...</td>
+      <td th:utext="${notContact.firstname}">...</td>
+      <td th:utext="${notContact.lastname}">...</td>
+      <td>
+        <p class="text-right m-0"> <a class="btn btn-success" onclick="return confirm( 'Do you really want to add this contact?')"
+                                      th:href="@{/addContact(email=${notContact.email})}">AddContact</a><i class="far fa-user"></i></p>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
 
 <footer class="my-5 pt-5 text-muted text-center text-small">
   <p class="mb-1">&copy;2021 PayMyBuddy Company </p>
