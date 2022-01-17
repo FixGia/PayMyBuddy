@@ -21,7 +21,7 @@
 <div class="container">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="background-color: whitesmoke">
         <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-            <img src="/static/Img/logoPmB.png">
+            <img src="/Img/logoPmB.png">
             <svg class="bi me-2" width="80" height="64" role="img" aria-label="Bootstrap"><use xlink:href="#PayMyBuddy"/></svg> </img>
         </a>
 
@@ -45,12 +45,7 @@
 
 <div class="container px-4 py-5" id="featured-3">
     <h2 class="text-center text-info" >PayMyBuddy Application</h2>
-    <h5 class="text-center text-info" th:text="${'Welcome'+currentUser.firstname+currentUser.lastname}">  </br>
-    Our application is great and believe me or not but now you can payback your det. </br>
-        Our application is great and believe me or not but now you can payback your det. </br>
-        Our application is great and believe me or not but now you can payback your det. </br>
-        Our application is great and believe me or not but now you can payback your det. </br>
-    </h5>
+    <h5 class="text-center text-info" th:text="${'Welcome '+currentUser.firstname+currentUser.lastname}"> </h5>
     </br></br></br>
     <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
         <div class="feature col">
@@ -59,7 +54,7 @@
             </div>
             <h2 class="text-center"><a href="#" th:href="@{/Transaction}" class="text-info"> Display Transaction </a></h2>
             </br>
-            <h2 class=" text-center"> <a  href="#" th:href="@{/FormTransaction}" class="text-info">Make a transaction. Pay one of yours contacts </a> </h2>
+            <h4 class=" text-center"> <a  href="#" th:href="@{/FormTransaction}" class="text-info">Make a transaction. </br> Pay one of yours contacts </a> </h4>
         </div>
         <div class="feature col">
             <div class="feature-icon bg-primary bg-gradient">
@@ -68,7 +63,7 @@
             <h2 class="text-center" > <a href="#" th:href="@{/Profile}" class="text-info"> Profile </a></h2>
             </br></br>
 
-            <h2 class="text-info text-center"> <a href="#" th:href="@{/BankAccount}" class="text-info"> Add BankAccount ! </a> </h2>
+            <h2 class="text-info text-center"> <a href="#" th:href="@{/BankAccount}" class="text-danger"> Add Your BankAccount ! </a> </h2>
 
         </div>
         <div class="feature col">
@@ -77,8 +72,7 @@
             </div>
             <h2  class="text-center"><a href="#" th:href="@{/Contacts}" class="text-info">Contact </a></h2>
             </br>
-            <p class="text-info text-center"> Check your contact, add a new friend or delete bad one. Payback or not.
-                </br>Make your choice.</p>
+
         </div>
     </div>
 </div>

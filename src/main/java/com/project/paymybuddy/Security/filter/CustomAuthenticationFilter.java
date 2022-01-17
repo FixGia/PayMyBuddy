@@ -39,14 +39,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username= request.getParameter("email");
         String password= request.getParameter("password");
-        log.info("Email is: {}", username); log.info("Password is :{}", password);
+        log.info("Email is: {}", username); log.info("Password is :{******}");
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,password);
         return authenticationManager.authenticate(authenticationToken);
     }
-
-
-
-
 
 }
 
