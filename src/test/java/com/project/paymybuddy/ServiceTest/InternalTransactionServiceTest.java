@@ -1,13 +1,13 @@
 package com.project.paymybuddy.ServiceTest;
 
-import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntity;
-import com.project.paymybuddy.DAO.BankAccounts.BankAccountService;
-import com.project.paymybuddy.DAO.Transfers.TransferEntity;
-import com.project.paymybuddy.DAO.Transfers.TransferService;
-import com.project.paymybuddy.DAO.User.UserEntity;
-import com.project.paymybuddy.Domain.Service.UserService;
-import com.project.paymybuddy.Domain.DTO.TransferRequest;
-import com.project.paymybuddy.Domain.Service.Implementation.InternalTransactionServiceImpl;
+import com.project.paymybuddy.Entity.BankAccounts.BankAccountEntity;
+import com.project.paymybuddy.Service.BankAccountService;
+import com.project.paymybuddy.Entity.Transfers.TransferEntity;
+import com.project.paymybuddy.Service.TransferService;
+import com.project.paymybuddy.Entity.User.UserEntity;
+import com.project.paymybuddy.Service.UserService;
+import com.project.paymybuddy.DTO.TransferRequest;
+import com.project.paymybuddy.Service.Implementation.InternalTransactionServiceImpl;
 import com.project.paymybuddy.Exception.BalanceInsufficientException;
 import com.project.paymybuddy.Exception.NotConformDataException;
 import org.junit.jupiter.api.BeforeEach;
@@ -110,7 +110,7 @@ public class InternalTransactionServiceTest {
     @Test
     public void CalculateQualifyDebitWalletTransferButWalletInsufficientTest() {
         currentUser.setWallet(0);
-        assertFalse(internalTransactionService.CalculateQualifyDebitWalletTransfer(transferRequest));
+        assertThrows(BalanceInsufficientException.class, () -> internalTransactionService.CalculateQualifyDebitWalletTransfer(transferRequest));
     }
     @Test
     public void CalculateQualifyCreditWalletTransferTest(){
@@ -120,7 +120,7 @@ public class InternalTransactionServiceTest {
     @Test
     public void CalculateQualifyCreditWalletTransferButBankAccountAmountInsufficientTest(){
         bankAccount.setAmount(20);
-        assertFalse(internalTransactionService.CalculateQualifyCreditWalletTransfer(transferRequest));
+        assertThrows(BalanceInsufficientException.class, () -> internalTransactionService.CalculateQualifyCreditWalletTransfer(transferRequest));
     }
 
     @Test

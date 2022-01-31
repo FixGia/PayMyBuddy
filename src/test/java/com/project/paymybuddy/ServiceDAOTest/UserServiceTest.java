@@ -1,7 +1,7 @@
 package com.project.paymybuddy.ServiceDAOTest;
 
-import com.project.paymybuddy.DAO.User.*;
-import com.project.paymybuddy.Domain.Service.Implementation.UserServiceImpl;
+import com.project.paymybuddy.Entity.User.*;
+import com.project.paymybuddy.Service.Implementation.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

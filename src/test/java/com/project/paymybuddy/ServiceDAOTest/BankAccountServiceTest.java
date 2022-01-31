@@ -1,12 +1,12 @@
 package com.project.paymybuddy.ServiceDAOTest;
 
-import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntity;
-import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntityRepository;
-import com.project.paymybuddy.DAO.BankAccounts.BankAccountServiceImpl;
-import com.project.paymybuddy.DAO.User.UserEntity;
-import com.project.paymybuddy.DAO.User.UserRepository;
-import com.project.paymybuddy.Domain.Service.Implementation.UserServiceImpl;
-import com.project.paymybuddy.Domain.DTO.BankAccountRequest;
+import com.project.paymybuddy.Entity.BankAccounts.BankAccountEntity;
+import com.project.paymybuddy.Entity.BankAccounts.BankAccountEntityRepository;
+import com.project.paymybuddy.Service.Implementation.BankAccountServiceImpl;
+import com.project.paymybuddy.Entity.User.UserEntity;
+import com.project.paymybuddy.Entity.User.UserRepository;
+import com.project.paymybuddy.Service.Implementation.UserServiceImpl;
+import com.project.paymybuddy.DTO.BankAccountRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,12 +1,12 @@
 package com.project.paymybuddy.ServiceTest;
 
-import com.project.paymybuddy.DAO.User.UserEntity;
-import com.project.paymybuddy.DAO.User.UserRepository;
-import com.project.paymybuddy.Domain.Service.Implementation.UserServiceImpl;
-import com.project.paymybuddy.Domain.Util.EmailValidator;
+import com.project.paymybuddy.Entity.User.UserEntity;
+import com.project.paymybuddy.Entity.User.UserRepository;
+import com.project.paymybuddy.Service.Implementation.UserServiceImpl;
+import com.project.paymybuddy.Util.EmailValidator;
 
-import com.project.paymybuddy.Domain.DTO.RegistrationRequest;
-import com.project.paymybuddy.Domain.Service.Implementation.RegistrationServiceImpl;
+import com.project.paymybuddy.DTO.RegistrationRequest;
+import com.project.paymybuddy.Service.Implementation.RegistrationServiceImpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

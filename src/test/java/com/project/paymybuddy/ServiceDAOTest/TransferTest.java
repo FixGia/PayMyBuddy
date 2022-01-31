@@ -1,10 +1,10 @@
 package com.project.paymybuddy.ServiceDAOTest;
 
-import com.project.paymybuddy.DAO.BankAccounts.BankAccountEntity;
-import com.project.paymybuddy.DAO.Transfers.TransferEntity;
-import com.project.paymybuddy.DAO.Transfers.TransferRepository;
-import com.project.paymybuddy.DAO.Transfers.TransferServiceImpl;
-import com.project.paymybuddy.DAO.User.UserEntity;
+import com.project.paymybuddy.Entity.BankAccounts.BankAccountEntity;
+import com.project.paymybuddy.Entity.Transfers.TransferEntity;
+import com.project.paymybuddy.Entity.Transfers.TransferRepository;
+import com.project.paymybuddy.Service.Implementation.TransferServiceImpl;
+import com.project.paymybuddy.Entity.User.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,12 +62,7 @@ public class TransferTest {
         transferService.findById(1L);
         verify(transferRepository, times(1)).findById(1L);
     }
-    @Test
-    public void deleteTransferTest(){
-        lenient().when(transferRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(transfer));
-        transferService.deleteTransfer(1L);
-        verify(transferRepository,times(1)).delete(transfer);
-    }
+
     @Test
     public void saveTransferTest(){
         transferService.saveTransfer(transfer);

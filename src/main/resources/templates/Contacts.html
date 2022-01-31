@@ -12,19 +12,17 @@
   <!-- Bootstrap core CSS -->
 
 
-
-
   <!-- Custom styles for this template -->
   <link href="../static/css/list-groups.css" rel="stylesheet">
 </head>
 <div class="container">
   <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="background-color: whitesmoke">
     <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-      <img src="/static/Img/logoPmB.png">
+      <img src="/img/logo.png">
       <svg class="bi me-2" width="80" height="64" role="img" aria-label="Bootstrap"><use xlink:href="#PayMyBuddy"/></svg> </img>
     </a>
 
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0" style="font-size: x-large">
       <li sec:authorize="isAuthenticated()" ><a href="#" th:href="@{/Home}" class="nav-link px-2 link-secondary">Home</a></li>
       <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Contacts}" class="nav-link px-2 link-dark">Contacts</a></li>
       <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Profile}"class="nav-link px-2 link-dark">Profile</a></li>
@@ -33,15 +31,16 @@
 
     <div class="col-md-3 text-end">
       <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">
-        <button sec:authorize="isAuthenticated()" class="btn btn-outline-danger my-2 my-sm-0 btn-sm" type="submit">Logout</button>
-        <button sec:authorize="isAnonymous()" th:href="@{/login}" class="btn btn-outline-info my-2 my-sm-0 btn-sm" type="submit">Login</button>
+        <button sec:authorize="isAuthenticated()" class="btn btn-outline-danger my-2 my-sm-0 btn-lg" type="submit">Logout</button>
+        <button sec:authorize="isAnonymous()" th:href="@{/login}" class="btn btn-outline-info my-2 my-sm-0 btn-lg" type="submit">Login</button>
       </form>
     </div>
+
   </header>
 </div>
 
 
-<body>
+<body style="background-color: whitesmoke">
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -54,36 +53,31 @@
 
 
   <div class="container" th:each=" contact : ${contacts}">
-    <div class="row mb-3">
+    <div class="row mb-3 d-flex">
       <div class="col-md-6">
-        <div class="d-flex flex-row border rounded">
-          <div class="p-0 w-25">
-            <img src="https://c1.staticflickr.com/3/2862/12328317524_18e52b5972_k.jpg" class="img-thumbnail border-0" />
-          </div>
-          <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left">
-            <h4 class="text-primary"th:utext="${contact.firstname}"> </h4>
-            <h5 class="text-info" th:utext="${contact.lastname}"> </h5>
-            <ul class="m-0 float-left" style="list-style: none; margin:0; padding: 0">
-              <li><i class="text-primary" th:utext="${contact.email}"></i></li>
-            </ul>
-            <p class="text-right m-0"> <a class="btn btn-danger" onclick="return confirm( 'Do you really want to delete this contact?')"
+          <div class="pl-3 pt-2 pr-2 pb-2 w-75 border-left" style="color: whitesmoke; background-color: #666666">
+            <h4 style="color: #f47e13" th:utext="${contact.firstname}"> </h4>
+
+            <h5 style="color: #7dd076" th:utext="${contact.lastname}"> </h5>
+            <h6 style="color: #f47e13" th:utext="${contact.email}"></h6>
+            <p class="text-right m-0"> <a class="btn btn-danger"   style="color: #f47e13" onclick="return confirm( 'Do you really want to delete this contact?')"
                                           th:href="@{/deleteContact(email=${contact.email})}">Delete</a></p>
-            <p class="text-right m-0"> <a class="btn btn-success" th:href="@{/FormTransaction}">Make Transaction </a></p>
+            </br>
+            <p class="text-right m-0" > <a class="btn btn-light" th:href="@{/FormTransaction}" style="color: #f47e13"onclick="return confirm( 'Do you really want to make a transaction ?')">Make Transaction </a></p>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  </form>
 
   <div class="consTrans3">
-  <table class="table">
+  <table class="table" style="background-color: #666666; color: whitesmoke">
     <thead>
     <tr class="panel-th" >
-      <th width="30%"  style="font-style:italic; font-size:14px; color:#707070; ">Email</th>
-      <th width="50%" style="font-style:italic; font-size:14px; color:#707070; ">LastName</th>
-      <th width="20%" style="font-style:italic; font-size:14px; color:#707070; ">FirstName</th>
+      <th width="30%"  style="font-style:italic; font-size:14px; color:#f47e13; ">Email</th>
+      <th width="50%" style="font-style:italic; font-size:14px; color:#f47e13; ">LastName</th>
+      <th width="20%" style="font-style:italic; font-size:14px; color:#f47e13; ">FirstName</th>
       <th ></th>
     </thead>
     </tr>
@@ -93,8 +87,8 @@
       <td th:utext="${notContact.firstname}">...</td>
       <td th:utext="${notContact.lastname}">...</td>
       <td>
-        <p class="text-right m-0"> <a class="btn btn-success" onclick="return confirm( 'Do you really want to add this contact?')"
-                                      th:href="@{/addContact(email=${notContact.email})}">AddContact</a><i class="far fa-user"></i></p>
+        <p class="text-right m-0" > <a class="btn btn-light"  style="color: #f47e13" onclick="return confirm( 'Do you really want to add this contact?')"
+                                      th:href="@{/addContact(email=${notContact.email})}">AddContact</a></p>
       </td>
     </tr>
     </tbody>

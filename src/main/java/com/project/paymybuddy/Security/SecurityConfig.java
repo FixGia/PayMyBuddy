@@ -4,6 +4,7 @@ package com.project.paymybuddy.Security;
 import com.project.paymybuddy.Security.filter.CustomAuthenticationFilter;
 import lombok.AllArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,8 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/about", "/checkout", "/Index").permitAll()
-
+                .antMatchers("/", "/about", "/checkout", "/Index", "/css/**", "/img/**", "/js/**").permitAll()
                 .antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and().formLogin()
@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/Home", true)
                 .failureUrl("/login.html?error=true")
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/Index")
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/")
                 .and().rememberMe().tokenValiditySeconds(2592000).key("mySecret!").rememberMeParameter("checkRememberMe");
                http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
         http.addFilter(customAuthenticationFilter);

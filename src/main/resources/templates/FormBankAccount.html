@@ -4,29 +4,57 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Add BankAccount</title>
+    <title>Credit Your Wallet</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/css/checkout.css" >
     <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link th:href="@{//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!------ Include the above in your HEAD tag ---------->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="background-color: whitesmoke">
+        <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            <img src="/img/logo.png">
+            <svg class="bi me-2" width="80" height="64" role="img" aria-label="Bootstrap"><use xlink:href="#PayMyBuddy"/></svg> </img>
+        </a>
 
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0" style="font-size: x-large">
+            <li sec:authorize="isAuthenticated()" ><a href="#" th:href="@{/Home}" class="nav-link px-2 link-secondary">Home</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Contacts}" class="nav-link px-2 link-dark">Contacts</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Profile}"class="nav-link px-2 link-dark">Profile</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="#"th:href="@{/Transaction}" class="nav-link px-2 link-dark">Transactions</a></li>
+        </ul>
+
+        <div class="col-md-3 text-end">
+            <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">
+                <button sec:authorize="isAuthenticated()" class="btn btn-outline-danger my-2 my-sm-0 btn-lg" type="submit">Logout</button>
+                <button sec:authorize="isAnonymous()" th:href="@{/login}" class="btn btn-outline-info my-2 my-sm-0 btn-lg" type="submit">Login</button>
+            </form>
+        </div>
+
+    </header>
+</div>
 <body>
 </br></br></br></br></br></br></br></br>
-<h4 class="mb-3 text-center text-info">Add BankAccount</h4>
+<H2 style="text-align: center"><img src="/img/logo.png"> </H2>
+</br></br>
+
 </br>
-<div class="main-login main-center text-center text-info">
+<div class="main-login main-center text-center" style="font-size: x-large">
+    <h4 class="mb-3 text-center" style="font-size: xx-large">Add BankAccount</h4>
+    </br>
 <form th:action="@{/addBankAccount}" method="post" >
     <div class="form-group">
         <label for="Iban" class="cols-sm-2 control-label">Iban</label>
         <div class="cols-sm-10">
             <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+
                 <input type="text" class="form-control" name="Iban" id="Iban"  placeholder="Enter your BankAccount Iban" value="" required/>
             </div>
         </div>
@@ -36,13 +64,13 @@
         <label for="amount" class="cols-sm-2 control-label">Your Amount</label>
         <div class="cols-sm-10">
             <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
                 <input type="number" class="form-control" name="amount" id="amount"  placeholder="Enter your amount" value="" required/>
             </div>
         </div>
     </div>
     <div class="form-group ">
-        <input type="submit" name="register" class="btn btn-info btn-md" value="UPDATE" onclick="return confirm('Are you sure to link BankAccount To User? ')">
+        <input type="submit" name="register" class="btn btn-light btn-lg" value="Add BankAccount" onclick="return confirm('Are you sure to link BankAccount To User? ')">
+        <a class="btn btn-danger btn-lg" href="/Profile">Cancel</a>
     </div>
 </form>
 </div>

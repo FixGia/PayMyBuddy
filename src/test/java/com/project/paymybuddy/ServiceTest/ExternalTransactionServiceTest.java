@@ -1,11 +1,11 @@
 package com.project.paymybuddy.ServiceTest;
 
-import com.project.paymybuddy.DAO.Transactions.TransactionEntity;
-import com.project.paymybuddy.DAO.Transactions.TransactionService;
-import com.project.paymybuddy.DAO.User.UserEntity;
-import com.project.paymybuddy.Domain.Service.UserService;
-import com.project.paymybuddy.Domain.DTO.TransactionRequest;
-import com.project.paymybuddy.Domain.Service.Implementation.ExternalTransactionServiceImpl;
+import com.project.paymybuddy.Entity.Transactions.TransactionEntity;
+import com.project.paymybuddy.Service.TransactionService;
+import com.project.paymybuddy.Entity.User.UserEntity;
+import com.project.paymybuddy.Service.UserService;
+import com.project.paymybuddy.DTO.TransactionRequest;
+import com.project.paymybuddy.Service.Implementation.ExternalTransactionServiceImpl;
 import com.project.paymybuddy.Exception.BalanceInsufficientException;
 import com.project.paymybuddy.Exception.NotConformDataException;
 import org.junit.jupiter.api.BeforeEach;

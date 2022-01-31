@@ -1,9 +1,9 @@
 package com.project.paymybuddy.ServiceDAOTest;
 
-import com.project.paymybuddy.DAO.Transactions.TransactionEntity;
-import com.project.paymybuddy.DAO.Transactions.TransactionRepository;
-import com.project.paymybuddy.DAO.Transactions.TransactionServiceImpl;
-import com.project.paymybuddy.DAO.User.UserEntity;
+import com.project.paymybuddy.Entity.Transactions.TransactionEntity;
+import com.project.paymybuddy.Entity.Transactions.TransactionRepository;
+import com.project.paymybuddy.Entity.User.UserEntity;
+import com.project.paymybuddy.Service.Implementation.TransactionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -41,7 +39,6 @@ public class TransactionServiceTest {
         transactionEntity.setBeneficiary(beneficiary);
         transactionEntity.setDescription("BlaBlaBlaTest");
         transactionEntity.setAmount(501);
-        transactionEntity.setCreationDate(LocalDate.now());
         lenient().when(transactionRepository.save(transactionEntity)).thenReturn(transactionEntity);
     }
 
@@ -63,6 +60,7 @@ public class TransactionServiceTest {
     }
     @Test
     public void findTransactionByIdTest() {
+        lenient().when(transactionRepository.findById(1L)).thenReturn(Optional.of(transactionEntity));
         transactionService.findTransactionById(1L);
         verify(transactionRepository, times(1)).findById(1L);
     }

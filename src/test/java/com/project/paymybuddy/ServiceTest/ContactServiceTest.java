@@ -1,9 +1,9 @@
 package com.project.paymybuddy.ServiceTest;
 
-import com.project.paymybuddy.DAO.User.UserEntity;
-import com.project.paymybuddy.DAO.User.UserRepository;
-import com.project.paymybuddy.Domain.Service.UserService;
-import com.project.paymybuddy.Domain.Service.Implementation.ContactServiceImpl;
+import com.project.paymybuddy.Entity.User.UserEntity;
+import com.project.paymybuddy.Entity.User.UserRepository;
+import com.project.paymybuddy.Service.UserService;
+import com.project.paymybuddy.Service.Implementation.ContactServiceImpl;
 import com.project.paymybuddy.Exception.DataNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,7 +65,7 @@ public class ContactServiceTest {
         user.setContactList(contactList);
         contactService.addContact("PetitTest@gmail.com");
         assertTrue(user.getContactList().contains(addUser));
-        verify(userRepository, times(1)).save(user);
+        verify(userService, times(1)).updateUsers(user);
     }
     @Test
     public void TestAddContactButContactDoesntExist(){
@@ -89,7 +88,7 @@ public class ContactServiceTest {
         user.setContactList(contactList);
         contactList.add(addUser);
         contactService.deleteContactInContactList("PetitTest@gmail.com");
-        verify(userService, times(1)).saveUser(user);
+        verify(userService, times(1)).updateUsers(user);
         assertTrue(contactList.isEmpty());
     }
 
