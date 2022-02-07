@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Spring Boot</title>
+</head>
+<body>
+<h3>ERROR ! </h3>
+
+<div>
+
+    <form th:action="@{/Home}" method="GET">
+        <h2 sec:authorize="isAuthenticated()"> Please Return to HomePage !</h2>
+        <input sec:authorize="isAuthenticated()" type="submit" value="HOME"/>
+    </form>
+    <form th:action="@{/}" method="GET">
+        <h2 sec:authorize="isAnonymous()"> Error when you Login, please retry</h2>
+        <h3 sec:authorize="isAnonymous()"> Check if your email or your password was correct !  </h3>
+        <input sec:authorize="isAnonymous()" type="submit" value="Login">
+    </form>
+</div>
+</body>
+</html>

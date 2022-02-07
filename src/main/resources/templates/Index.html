@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Index</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/checkout.css" >
+  <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <link th:href="@{//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!------ Include the above in your HEAD tag ---------->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<div class="container">
+  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="background-color: whitesmoke">
+    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+      <img src="/img/logo.png">
+      <svg class="bi me-2" width="80" height="64" role="img" aria-label="Bootstrap"><use xlink:href="#PayMyBuddy"/></svg> </img>
+    </a>
+
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0" style="font-size: x-large">
+      <li sec:authorize="isAuthenticated()" ><a href="#" th:href="@{/Home}" class="nav-link px-2 link-secondary">Home</a></li>
+      <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Contacts}" class="nav-link px-2 link-dark">Contacts</a></li>
+      <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{/Profile}"class="nav-link px-2 link-dark">Profile</a></li>
+      <li sec:authorize="isAuthenticated()"><a href="#"th:href="@{/Transaction}" class="nav-link px-2 link-dark">Transactions</a></li>
+    </ul>
+
+    <div class="col-md-3 text-end">
+      <form class="form-inline my-2 my-lg-0" form-method="post" th:action="@{/logout}">
+        <button sec:authorize="isAuthenticated()" class="btn btn-outline-danger my-2 my-sm-0 btn-lg" type="submit">Logout</button>
+      </form>
+    </div>
+
+  </header>
+</div>
+<!------ Include the above in your HEAD tag ---------->
+<H2 style="text-align: center"><img src="/img/logo.png"> </H2>
+</br>
+<body>
+<div class="main-login main-center" style="font-size: large">
+  </br>
+  <H1 class="text-center" style="font-size: xx-large"> Login PayMyBuddy</H1>
+  </br>
+  <H2 class="text-center" style="font-size: x-large"> WELCOME ! </H2>
+  </br>
+
+
+  <div class="container">
+    <form th:action="@{/login}" method="post" id="login-form" class="form">
+
+
+      <div class="form-group">
+        <label for="email">Email:</label><br>
+        <input type="text" name="email" id="email" class="form-control" value="" required>
+        <div class="invalid-feedback">
+          Valid email is required.
+        </div>
+
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label><br>
+        <input type="password" name="password" id="password" class="form-control" value="" required>
+        <div class="invalid-feedback">
+          Valid password is required.
+        </div>
+      </div>
+
+
+                <div class="form-group">
+                  </br>
+                  <label for="remember-me" style="text-align: left"><span>Remember me</span> <span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br></br>
+                  <input type="submit" name="submit" class="btn btn-light btn-lg" style="margin-right: 140px" value="Login">
+                  <a href="#"  sec:authorize="isAnonymous()" th:href="@{/checkout}" style="color:whitesmoke">Register here</a>
+                </div>
+          </form>
+  </div>
+</div>
+</body>
+
+<footer class="my-5 pt-5 text-muted text-center text-small">
+  <p class="mb-1">&copy;2021 PayMyBuddy Company </p>
+  <ul class="list-inline">
+    <li class="list-inline-item"><a href="#">Privacy</a></li>
+    <li class="list-inline-item"><a href="#">Terms</a></li>
+    <li class="list-inline-item"><a href="#">Support</a></li>
+  </ul>
+</footer>
+</html>
+
