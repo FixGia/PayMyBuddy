@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 public class RegistrationServiceTest {
 
     private UserEntity user = new UserEntity();
-    private RegistrationRequest request = new RegistrationRequest();
+    private final RegistrationRequest request = new RegistrationRequest();
 
 
     @Mock

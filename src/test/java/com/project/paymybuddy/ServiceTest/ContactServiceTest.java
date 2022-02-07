@@ -22,9 +22,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class ContactServiceTest {
 
-    private UserEntity user = new UserEntity();
-    private UserEntity addUser = new UserEntity();
-    private List<UserEntity> contactList = new ArrayList<>();
+    private final UserEntity user = new UserEntity();
+    private final UserEntity addUser = new UserEntity();
+    private final List<UserEntity> contactList = new ArrayList<>();
     private DataNotFoundException dataNotFoundException;
 
     @Mock
