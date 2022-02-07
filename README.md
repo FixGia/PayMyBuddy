@@ -23,6 +23,6 @@
 
 ![image](https://user-images.githubusercontent.com/79265943/152802788-2dc4d935-48d7-4768-abc5-9550e77de330.png)
 
-## Script SQL
+## Script SQL https://github.com/FixGia/PayMyBuddy/blob/master/src/main/script.sql
 
 
