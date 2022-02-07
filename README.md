@@ -8,7 +8,6 @@
 
 ![image](https://user-images.githubusercontent.com/79265943/152798445-5c034cc9-fdc6-4892-a5ca-b1088647c079.png)
 
-JAVA 11, Spring , Springboot, Maven , PostgreSQL , LOMBOK, Jacoco , J-unit. 
 
 ## The DataBase
 
