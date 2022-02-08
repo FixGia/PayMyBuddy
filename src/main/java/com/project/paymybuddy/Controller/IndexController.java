@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @AllArgsConstructor
 public class IndexController {
 
-    UserService userService;
+   private final UserService userService;
 
     @GetMapping(value = {""})
     public String index(Model model) {

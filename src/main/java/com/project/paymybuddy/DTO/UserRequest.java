@@ -47,7 +47,7 @@ public class UserRequest {
 
     @Digits(integer = 10, fraction = 2, message = "max digits 10 with 2 decimals")
     @Min(value = 0, message = "must be positive number")
-    private Double Wallet;
+    private double Wallet;
 
 
 }

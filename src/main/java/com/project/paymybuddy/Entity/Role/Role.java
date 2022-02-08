@@ -1,4 +1,4 @@
-package com.project.paymybuddy.Entity.User;
+package com.project.paymybuddy.Entity.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

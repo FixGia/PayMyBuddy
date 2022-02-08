@@ -1,9 +1,9 @@
 package com.project.paymybuddy.TestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.paymybuddy.Service.BankAccountService;
-import com.project.paymybuddy.Entity.User.UserEntity;
 import com.project.paymybuddy.DTO.BankAccountRequest;
+import com.project.paymybuddy.Entity.User.UserEntity;
+import com.project.paymybuddy.Service.BankAccountService;
 import com.project.paymybuddy.Service.RegistrationService;
 import com.project.paymybuddy.Service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,10 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -61,7 +58,7 @@ public class BankAccountControllerTest {
         user.setEmail("JeanTest@gmail.com");
 
         bankAccountRequest = new BankAccountRequest();
-        bankAccountRequest.setAmount(1000);
+        bankAccountRequest.setAmount(1000.0);
         bankAccountRequest.setIban("TesT123456789");
 
 

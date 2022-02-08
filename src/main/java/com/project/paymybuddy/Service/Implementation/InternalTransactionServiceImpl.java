@@ -22,9 +22,9 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
 
     private static final double DESCRIPTION_LENGTH = 30;
 
-    private BankAccountService bankAccountService;
-    private UserService userService;
-    private TransferService transferService;
+    private final BankAccountService bankAccountService;
+    private final UserService userService;
+    private final TransferService transferService;
 
 
     @Transactional
@@ -45,6 +45,7 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
                 /* Set parameters for transfer entity
                  */
                 TransferEntity transfer = new TransferEntity();
+                transfer.setAmount(transferRequest.getAmount());
                 transfer.setDebit(transferRequest.getAmount());
                 BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get();
                 transfer.setBankAccount(userBankAccount);
@@ -84,6 +85,7 @@ public class InternalTransactionServiceImpl implements InternalTransactionServic
 
 
                 TransferEntity transfer = new TransferEntity();
+                transfer.setAmount(transferRequest.getAmount());
                 transfer.setCredit(transferRequest.getAmount());
                 BankAccountEntity userBankAccount = bankAccountService.findBankAccountByUserEmail(currentUsers.getEmail()).get();
                 transfer.setBankAccount(userBankAccount);

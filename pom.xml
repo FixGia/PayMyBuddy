@@ -143,9 +143,8 @@
                 <version>0.8.5</version>
                 <configuration>
                     <excludes>
-                        <exclude>com/project/paymybuddy/DAO/**/*</exclude>
-                        <exclude>com/project/paymybuddy/Domain/DTO/**/*</exclude>
-                        <exclude>com/project/paymybuddy/Registration/UserDTO</exclude>
+                        <exclude>com/project/paymybuddy/Entity/**/*</exclude>
+                        <exclude>com/project/paymybuddy/DTO/**/*</exclude>
                         <exclude>com/project/paymybuddy/Security/filter/**</exclude>
 
                     </excludes>

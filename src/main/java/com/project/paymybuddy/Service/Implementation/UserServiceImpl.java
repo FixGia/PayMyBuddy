@@ -1,7 +1,7 @@
 package com.project.paymybuddy.Service.Implementation;
 
-import com.project.paymybuddy.Entity.User.Role;
-import com.project.paymybuddy.Entity.User.RoleRepository;
+import com.project.paymybuddy.Entity.Role.Role;
+import com.project.paymybuddy.Entity.Role.RoleRepository;
 import com.project.paymybuddy.Entity.User.UserEntity;
 import com.project.paymybuddy.Entity.User.UserRepository;
 import com.project.paymybuddy.DTO.UserRequest;
@@ -106,7 +106,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return Optional.of(userEntity);
     }
 
-    //TODO Fix this "thing" !
     public UserEntity updateProfile(UserRequest userRequest) {
         UserEntity userToUpdate = getCurrentUser();
         if (userToUpdate != null) {

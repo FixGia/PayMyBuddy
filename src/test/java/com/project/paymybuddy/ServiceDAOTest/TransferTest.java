@@ -36,17 +36,17 @@ public class TransferTest {
         user.setEmail("JeanTest@gmail.com");
         user.setCivility("M");
         user.setId(1L);
-        user.setWallet(50);
+        user.setWallet(50.0);
 
         bankAccount.setIdBankAccount(1);
         bankAccount.setIban("Fr123456789");
-        bankAccount.setAmount(1000);
+        bankAccount.setAmount(1000.0);
         transfer.setDescription("blblalblaTest");
         transfer.setUserEntity(user);
         transfer.setBankAccount(bankAccount);
-        transfer.setCredit(50);
-        transfer.setDebit(50);
-        transfer.setAmount(1200);
+        transfer.setCredit(50.0);
+        transfer.setDebit(50.0);
+        transfer.setAmount(1200.0);
         transfer.setId(1L);
 
 

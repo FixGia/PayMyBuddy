@@ -1,12 +1,12 @@
 package com.project.paymybuddy.ServiceDAOTest;
 
+import com.project.paymybuddy.DTO.BankAccountRequest;
 import com.project.paymybuddy.Entity.BankAccounts.BankAccountEntity;
 import com.project.paymybuddy.Entity.BankAccounts.BankAccountEntityRepository;
-import com.project.paymybuddy.Service.Implementation.BankAccountServiceImpl;
 import com.project.paymybuddy.Entity.User.UserEntity;
 import com.project.paymybuddy.Entity.User.UserRepository;
+import com.project.paymybuddy.Service.Implementation.BankAccountServiceImpl;
 import com.project.paymybuddy.Service.Implementation.UserServiceImpl;
-import com.project.paymybuddy.DTO.BankAccountRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,7 +40,7 @@ public class BankAccountServiceTest {
         bankAccount = new BankAccountEntity();
         bankAccount.setIdBankAccount(1);
         bankAccount.setIban("Fr123456789");
-        bankAccount.setAmount(1000);
+        bankAccount.setAmount(1000.0);
 
         user = new UserEntity();
         user.setFirstname("Jean");
@@ -49,7 +48,7 @@ public class BankAccountServiceTest {
         user.setEmail("JeanTest@gmail.com");
         user.setCivility("M");
         user.setId(1L);
-        user.setWallet(50);
+        user.setWallet(50.0);
 
         bankAccount.setUser(user);
 
@@ -72,7 +71,6 @@ public class BankAccountServiceTest {
     }
 
     @Test
-    //TODO FIX THIS TEST
     public void testUpdateBankAccount() {
 
         bankAccountService.updateBankAccount(bankAccount);
@@ -91,14 +89,14 @@ public class BankAccountServiceTest {
     public void LinkUserToBankAccount(){
         BankAccountRequest bankAccountRequest = new BankAccountRequest();
         bankAccountRequest.setIban("BE123456789");
-        bankAccountRequest.setAmount(1000);
+        bankAccountRequest.setAmount(1000.0);
         UserEntity user = new UserEntity();
         user.setFirstname("Jeanne");
         user.setLastname("Testé");
         user.setEmail("JeanneTest@gmail.com");
         user.setCivility("Mme");
         user.setId(2L);
-        user.setWallet(500);
+        user.setWallet(500.0);
         lenient().when(userService.getCurrentUser()).thenReturn(user);
         bankAccountService.LinkUserToBankAccount(bankAccountRequest);
         verify(bankAccountEntityRepository, times(1)).save(bankAccountEntityRepository.findBankAccountEntityByIban("BE123456789"));

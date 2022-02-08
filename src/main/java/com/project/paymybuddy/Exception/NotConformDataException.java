@@ -3,7 +3,7 @@ package com.project.paymybuddy.Exception;
 /**
  * NotConformDataException Class
  *
- * @author Etternell
+ * @author FixGia
  *
  */
 

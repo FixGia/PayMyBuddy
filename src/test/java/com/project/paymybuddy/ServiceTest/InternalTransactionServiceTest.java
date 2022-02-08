@@ -48,7 +48,7 @@ public class InternalTransactionServiceTest {
         currentUser.setFirstname("Jean");
         currentUser.setLastname("Test");
         currentUser.setEnabled(true);
-        currentUser.setWallet(100);
+        currentUser.setWallet(100.0);
         otherUser.setId(2L);
         otherUser.setEmail("PetitTest@gmail.com");
         otherUser.setPassword("password");
@@ -56,12 +56,12 @@ public class InternalTransactionServiceTest {
         otherUser.setFirstname("Petit");
         otherUser.setLastname("Test");
         otherUser.setEnabled(true);
-        otherUser.setWallet(100);
+        otherUser.setWallet(100.0);
         bankAccount.setUser(currentUser);
         bankAccount.setIban("IBAN123456789");
-        bankAccount.setAmount(1000);
+        bankAccount.setAmount(1000.0);
         bankAccount.setIdBankAccount(1);
-        transferRequest.setAmount(100);
+        transferRequest.setAmount(100.0);
         transferRequest.setDescription("Test");
         lenient().when(userService.getCurrentUser()).thenReturn(currentUser);
         lenient().when(bankAccountService.findBankAccountByUserEmail(currentUser.getEmail())).thenReturn(java.util.Optional.of(bankAccount));
@@ -100,7 +100,7 @@ public class InternalTransactionServiceTest {
     }
     @Test
     public void prepareTransferButAmountLessThanZeroTest(){
-        transferRequest.setAmount(-5);
+        transferRequest.setAmount(-5.0);
         assertThrows(BalanceInsufficientException.class, () -> internalTransactionService.prepareTransfer(transferRequest));
     }
     @Test
@@ -109,7 +109,7 @@ public class InternalTransactionServiceTest {
     }
     @Test
     public void CalculateQualifyDebitWalletTransferButWalletInsufficientTest() {
-        currentUser.setWallet(0);
+        currentUser.setWallet(0.0);
         assertThrows(BalanceInsufficientException.class, () -> internalTransactionService.CalculateQualifyDebitWalletTransfer(transferRequest));
     }
     @Test
@@ -119,7 +119,7 @@ public class InternalTransactionServiceTest {
 
     @Test
     public void CalculateQualifyCreditWalletTransferButBankAccountAmountInsufficientTest(){
-        bankAccount.setAmount(20);
+        bankAccount.setAmount(20.0);
         assertThrows(BalanceInsufficientException.class, () -> internalTransactionService.CalculateQualifyCreditWalletTransfer(transferRequest));
     }
 

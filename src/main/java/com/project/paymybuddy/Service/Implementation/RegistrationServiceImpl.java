@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class RegistrationServiceImpl implements RegistrationService {
 
 
-    private EmailValidator emailValidator;
+    private final EmailValidator emailValidator;
     private final UserServiceImpl userService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;

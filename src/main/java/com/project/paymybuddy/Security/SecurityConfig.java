@@ -3,8 +3,6 @@ package com.project.paymybuddy.Security;
 
 import com.project.paymybuddy.Security.filter.CustomAuthenticationFilter;
 import lombok.AllArgsConstructor;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
@@ -43,7 +40,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "/about", "/checkout", "/Index", "/css/**", "/img/**", "/js/**").permitAll()
-                .antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and().formLogin()
                 .loginPage("/Index")

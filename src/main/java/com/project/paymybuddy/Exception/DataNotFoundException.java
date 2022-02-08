@@ -4,7 +4,7 @@ package com.project.paymybuddy.Exception;
 /**
  * Data Not Found Exception Class
  *
- * @author Etternell
+ * @author FixGia
  *
  */
 public class DataNotFoundException extends RuntimeException {

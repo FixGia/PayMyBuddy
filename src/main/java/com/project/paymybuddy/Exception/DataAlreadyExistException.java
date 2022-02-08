@@ -4,7 +4,7 @@ package com.project.paymybuddy.Exception;
 /**
  * Data Already Exists Class
  *
- * @author Etternell
+ * @author FixGia
  */
 public class DataAlreadyExistException extends RuntimeException{
 

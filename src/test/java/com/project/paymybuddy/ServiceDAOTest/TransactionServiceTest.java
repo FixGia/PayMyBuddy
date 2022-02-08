@@ -38,7 +38,7 @@ public class TransactionServiceTest {
         beneficiary.setEmail("TestBenefiary@gmail.com");
         transactionEntity.setBeneficiary(beneficiary);
         transactionEntity.setDescription("BlaBlaBlaTest");
-        transactionEntity.setAmount(501);
+        transactionEntity.setAmount(501.0);
         lenient().when(transactionRepository.save(transactionEntity)).thenReturn(transactionEntity);
     }
 

@@ -3,7 +3,7 @@ package com.project.paymybuddy.Exception;
 /**
  * BalanceInsufficientClass
  *
- * @author Etternell
+ * @author FixGia
  */
 public class BalanceInsufficientException extends RuntimeException{
     /**

@@ -16,7 +16,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class TransferServiceImpl implements TransferService {
 
-    TransferRepository transferRepository;
+    private final TransferRepository transferRepository;
 
     @Override
     public List<TransferEntity> findAllByUser(UserEntity userEntity) {

@@ -23,7 +23,7 @@ public class BankAccountEntity {
 
     private double Amount;
 
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     @JoinColumn(name = "users_id")
     private UserEntity user;
 

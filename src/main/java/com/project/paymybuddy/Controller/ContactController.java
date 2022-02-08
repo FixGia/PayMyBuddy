@@ -21,8 +21,8 @@ import java.util.List;
 @Slf4j
 public class ContactController {
 
-    private ContactService contactService;
-    private UserService userService;
+    private final ContactService contactService;
+    private final UserService userService;
 
 
     @GetMapping(value = {"/Contacts"})

@@ -12,6 +12,7 @@ public interface BankAccountEntityRepository extends JpaRepository<BankAccountEn
 
     List<BankAccountEntity> findAllByUserEmail(String email);
 
+
     BankAccountEntity findBankAccountEntityByIban(String iban);
 
 

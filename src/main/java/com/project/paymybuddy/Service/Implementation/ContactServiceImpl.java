@@ -1,9 +1,8 @@
 package com.project.paymybuddy.Service.Implementation;
 
-import com.project.paymybuddy.Service.ContactService;
-import com.project.paymybuddy.Exception.DataNotFoundException;
 import com.project.paymybuddy.Entity.User.UserEntity;
-import com.project.paymybuddy.Entity.User.UserRepository;
+import com.project.paymybuddy.Exception.DataNotFoundException;
+import com.project.paymybuddy.Service.ContactService;
 import com.project.paymybuddy.Service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +17,7 @@ import java.util.Optional;
 @Slf4j
 public class ContactServiceImpl implements ContactService {
 
-    UserRepository userRepository;
-    UserService userService;
+   private final UserService userService;
 
     /**
      * Users addContact

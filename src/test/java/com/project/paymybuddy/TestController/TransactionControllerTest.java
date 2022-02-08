@@ -82,7 +82,7 @@ public class TransactionControllerTest {
         bankAccount = new BankAccountEntity();
         bankAccount.setIban("Test1234456");
         bankAccount.setUser(user);
-        bankAccount.setAmount(1000);
+        bankAccount.setAmount(1000.0);
 
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
         when(userService.saveUser(user)).thenReturn(user);

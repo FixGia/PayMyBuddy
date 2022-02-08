@@ -1,6 +1,6 @@
 package com.project.paymybuddy.Service;
 
-import com.project.paymybuddy.Entity.User.Role;
+import com.project.paymybuddy.Entity.Role.Role;
 import com.project.paymybuddy.Entity.User.UserEntity;
 import com.project.paymybuddy.DTO.UserRequest;
 

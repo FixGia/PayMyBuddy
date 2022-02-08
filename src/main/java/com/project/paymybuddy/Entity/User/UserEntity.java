@@ -1,5 +1,6 @@
 package com.project.paymybuddy.Entity.User;
 
+import com.project.paymybuddy.Entity.Role.Role;
 import com.project.paymybuddy.Util.GeneralConstraints;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;

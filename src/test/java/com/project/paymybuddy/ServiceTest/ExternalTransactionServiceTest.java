@@ -46,7 +46,7 @@ public class ExternalTransactionServiceTest {
         currentUser.setFirstname("Jean");
         currentUser.setLastname("Test");
         currentUser.setEnabled(true);
-        currentUser.setWallet(100);
+        currentUser.setWallet(100.0);
         otherUser.setId(2L);
         otherUser.setEmail("PetitTest@gmail.com");
         otherUser.setPassword("password");
@@ -54,10 +54,10 @@ public class ExternalTransactionServiceTest {
         otherUser.setFirstname("Petit");
         otherUser.setLastname("Test");
         otherUser.setEnabled(true);
-        otherUser.setWallet(100);
+        otherUser.setWallet(100.0);
         transactionRequest.setBeneficiary(otherUser.getEmail());
         transactionRequest.setPayer(currentUser.getEmail());
-        transactionRequest.setAmount(10);
+        transactionRequest.setAmount(10.0);
         transactionRequest.setDescription("test");
         lenient().when(userService.getCurrentUser()).thenReturn(currentUser);
         lenient().when(userService.getUser(transactionRequest.getPayer())).thenReturn(currentUser);
@@ -97,7 +97,7 @@ public class ExternalTransactionServiceTest {
     }
     @Test
     public void prepareTransactionButBalanceIsInsufficientTest(){
-        transactionRequest.setAmount(-5);
+        transactionRequest.setAmount(-5.0);
         assertThrows(BalanceInsufficientException.class, () -> externalTransactionService.prepareTransaction(transactionRequest));
     }
     @Test
@@ -107,7 +107,7 @@ public class ExternalTransactionServiceTest {
     }
     @Test
     public void CalculateQualifyTransactionButWalletIsNotSufficientTest(){
-        transactionRequest.setAmount(10000000);
+        transactionRequest.setAmount(1000000.0);
         assertThrows(BalanceInsufficientException.class, () ->externalTransactionService.CalculateQualifyTransaction(transactionRequest));
     }
     @Test

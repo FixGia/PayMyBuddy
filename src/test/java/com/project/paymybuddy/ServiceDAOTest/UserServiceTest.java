@@ -1,5 +1,7 @@
 package com.project.paymybuddy.ServiceDAOTest;
 
+import com.project.paymybuddy.Entity.Role.Role;
+import com.project.paymybuddy.Entity.Role.RoleRepository;
 import com.project.paymybuddy.Entity.User.*;
 import com.project.paymybuddy.Service.Implementation.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +49,7 @@ public class UserServiceTest {
         user.setEmail("JeanTest@gmail.com");
         user.setCivility("M");
         user.setId(1L);
-        user.setWallet(50);
+        user.setWallet(50.0);
         user.setPassword("password");
 
         role = new Role();

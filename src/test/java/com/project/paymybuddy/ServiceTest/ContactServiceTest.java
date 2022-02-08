@@ -41,7 +41,7 @@ public class ContactServiceTest {
         user.setEmail("JeanTest@gmail.com");
         user.setPassword("password");
         user.setCivility("M");
-        user.setWallet(5000);
+        user.setWallet(5000.0);
         user.setFirstname("Jean");
         user.setLastname("Test");
         user.setEnabled(true);
@@ -49,7 +49,7 @@ public class ContactServiceTest {
         addUser.setEmail("PetitTest@gmail.com");
         addUser.setPassword("password");
         addUser.setCivility("M");
-        addUser.setWallet(2000);
+        addUser.setWallet(2000.0);
         addUser.setFirstname("Petit");
         addUser.setLastname("Test");
         addUser.setEnabled(true);

@@ -48,7 +48,7 @@ public class RegistrationServiceTest {
         user.setEmail("JeanTest@gmail.com");
         user.setCivility("M");
         user.setId(1L);
-        user.setWallet(50);
+        user.setWallet(50.0);
         request.setCivility("M");
         request.setFirstname("Jean");
         request.setLastname("Test");

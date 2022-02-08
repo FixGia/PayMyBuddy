@@ -21,7 +21,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,11 +30,11 @@ import java.util.Optional;
 @Slf4j
 public class TransactionController {
 
-    private UserService userService;
-    private TransferService transferService;
-    private TransactionService transactionService;
-    private InternalTransactionService internalTransactionService;
-    private ExternalTransactionService externalTransactionService;
+    private final UserService userService;
+    private final TransferService transferService;
+    private final TransactionService transactionService;
+    private final InternalTransactionService internalTransactionService;
+    private final ExternalTransactionService externalTransactionService;
 
 
     @GetMapping(value = {"/Transaction"})

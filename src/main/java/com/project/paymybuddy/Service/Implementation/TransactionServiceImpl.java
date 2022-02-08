@@ -18,7 +18,7 @@ import java.util.Optional;
 public class TransactionServiceImpl implements TransactionService {
 
 
-    TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
 
     @Override
     public Iterable<TransactionEntity> findAllTransactions(Long id) {

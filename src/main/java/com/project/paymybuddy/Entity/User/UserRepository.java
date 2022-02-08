@@ -14,6 +14,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     UserEntity findByEmail(String email);
     UserEntity deleteByEmail(String email);
 
+
     @Transactional
     @Modifying
     @Query("UPDATE UserEntity a " +
